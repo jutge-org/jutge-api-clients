@@ -1,5 +1,6 @@
 out/
 src/tests/python/__pycache__
+src/tests/python/.pytest_cache
 src/tests/python/logo.png
 
 node_modules/
