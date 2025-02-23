@@ -10,7 +10,7 @@ This project assumes you are using `bun`. You can install it from `https://bun.s
 
 Run
 
-```bash
+```shell
 bun install
 ```
 
@@ -20,7 +20,7 @@ to install the TypeScript dependencies.
 
 You need a relatively new Python (>=3.12). You may install its dependencies with:
 
-```bash
+```shell
 python -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich pydantic
 ```
 
@@ -28,17 +28,17 @@ python -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich py
 
 Run
 
-```bash
+```shell
 bun gen
 ```
 
-and to generate all the clients in the `out` directory.
+to generate all the clients in the `out` directory.
 
 ## Test clients
 
 You can run the existing tests with:
 
-```bash
+```shell
 bun test-python
 bun test-typescript
 bun test-all
