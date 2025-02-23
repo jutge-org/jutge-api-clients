@@ -18,6 +18,8 @@
         "gen": "bun run src/index.ts",
         "lint": "bun eslint src",
         "format": "bun prettier src --write",
-        "test-python": "(cd src/tests/python && pytest)"
+        "test-python": "(cd src/tests/python && pytest)",
+        "test-typescript": "(cd src/tests/typescript && bun test)",
+        "test-all": "bun test-python ; bun test-typescript"
     }
 }
