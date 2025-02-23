@@ -27,6 +27,8 @@ def test_get_homepage_stats():
     assert isinstance(stats.users, int)
     assert isinstance(stats.problems, int)
     assert isinstance(stats.submissions, int)
+    assert isinstance(stats.exams, int)
+    assert isinstance(stats.contests, int)
 
 
 def test_get_logo():
