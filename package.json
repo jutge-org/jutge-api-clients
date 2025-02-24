@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@sinclair/typebox": "^0.34.27",
+        "chalk": "^5.4.1",
         "prettier": "^3.5.2",
         "prettier-plugin-organize-imports": "^4.1.0",
         "radash": "^12.1.0"
