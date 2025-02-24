@@ -35,10 +35,9 @@ public class Tutorial {
         // Get all compilers and print their name for those that are C++
         var compilers = jutge.tables.getCompilers();
         for (var entry : compilers.entrySet()) {
-            String compilerId = entry.getKey();
             var compiler = entry.getValue();
             if (compiler.language == "C++") {
-                System.out.printf("%s: '%s' (%s)%n", compilerId, compiler.name, compiler.language);
+                System.out.printf("%s: '%s' (%s)%n", compiler.compiler_id, compiler.name, compiler.language);
             }
         }
         System.out.println();
@@ -74,10 +73,9 @@ public class Tutorial {
         var statuses = jutge.student.statuses.getAll();
         List<String> accepteds = new ArrayList<>();
         for (var entry : statuses.entrySet()) {
-            String problemNm = entry.getKey();
             var status = entry.getValue();
             if ("accepted".equals(status.status)) {
-                accepteds.add(problemNm);
+                accepteds.add(status.problem_nm);
             }
         }
         Collections.sort(accepteds);
