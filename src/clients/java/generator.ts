@@ -47,7 +47,7 @@ Notes:
     - ifiles are implemented as byte[].
     - whatch out for optionals and nulls.
 
-**/
+*/
 `
     }
 
@@ -84,11 +84,11 @@ Notes:
         const endpoints = module.endpoints.map((endpoint) => this.genEndpoint(endpoint, path.concat(module.name), root))
 
         const klass = `
-/***
+/**
 ${module.description || 'No description yet'}
-***/
+*/
 @SuppressWarnings("unused")
-class ${pascal(path.join('_') + '_' + name)} {
+public static class ${pascal(path.join('_') + '_' + name)} {
 
     private JutgeApiClient root;
 
@@ -240,7 +240,7 @@ ${indent2(submodules_inits.join('\n'))}
         return `
 /**
 ${summary || 'No summary'}${actor ? '\n\n    🔐 Authenticated' : ''}    ${status ? `\n    ❌ Warning: ${status}` : ''}    ${description ? '\n\n' + description : ''}
-**/
+*/
 public ${result} ${name}(${params} ${ifiles_parameter}) throws Exception {
 
     ${code0}
@@ -260,13 +260,13 @@ public ${result} ${name}(${params} ${ifiles_parameter}) throws Exception {
             description = `
 /**
 ${mod.description}
-**/`
+*/`
         }
 
         return `
 ${description}
 @SuppressWarnings("unused")
-class ${mod.name} {
+public static class ${mod.name} {
 
 ${this.indent(module)}
 }
@@ -331,8 +331,8 @@ ${this.indent(module)}
                             return `    public ${this.typify(value, name, path, level + 1)} ${namify(key)};`
                         })
                         .join('\n')
-                    const description = '/** ' + (model.description ? model.description : 'No description yet') + ' **/'
-                    return `${description}\nclass ${name} {\n${props}\n}\n`
+                    const description = '/** ' + (model.description ? model.description : 'No description yet') + ' */'
+                    return `${description}\npublic static class ${name} {\n${props}\n}\n`
                 } else {
                     return Object.entries(model.properties)
                         .map(([key, value]: [string, any]) => `${this.typify(value, name, path, level + 1)} ${key}`)

@@ -2,7 +2,11 @@ out/
 src/tests/python/__pycache__
 src/tests/python/.pytest_cache
 src/tests/python/logo.png
+src/tests/typescript/logo.png
+src/tests/java/*.class
+src/tests/java/logo.png
 src/tests/cpp/*.exe
+src/tests/cpp/logo.png
 
 node_modules/
 .DS_Store
