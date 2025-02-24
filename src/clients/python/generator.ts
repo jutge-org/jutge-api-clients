@@ -27,7 +27,7 @@ async function format(source: string): Promise<string> {
         return source
     }
 
-    return withTmpDir(async (tmp) => {
+    return await withTmpDir(async (tmp) => {
         const path = `${tmp}/client.py`
         Bun.write(path, source)
         try {
@@ -51,7 +51,7 @@ async function check(source: string): Promise<void> {
         return
     }
 
-    withTmpDir(async (tmp) => {
+    await withTmpDir(async (tmp) => {
         const path = `${tmp}/client.py`
         Bun.write(path, source)
 
