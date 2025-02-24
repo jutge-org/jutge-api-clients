@@ -11,6 +11,8 @@ src/tests/cpp/logo.png
 
 src/tutorials/python/__pycache__
 src/tutorials/python/logo.png
+src/tutorials/java/*.class
+src/tutorials/java/logo.png
 
 node_modules/
 .DS_Store
