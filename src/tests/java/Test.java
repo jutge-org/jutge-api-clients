@@ -32,8 +32,10 @@ public class Test {
         JutgeApiClient client = new JutgeApiClient();
 
         JutgeApiClient.Download download = client.misc.getLogo();
-        assert download.name == "jutge.png";
-        assert download.type == "image/png";
+        System.out.println(download.name);
+        System.out.println(download.type);
+        check(download.name.equals("jutge.png"));
+        check(download.type.equals("image/png"));
 
         FileOutputStream fos = new FileOutputStream("logo.png");
         fos.write(download.data);
