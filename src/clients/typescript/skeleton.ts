@@ -188,7 +188,7 @@ export class JutgeApiClient {
 
     /** Simple logout */
     async logout(): Promise<void> {
-        await this.execute('auth.logout', {})
+        await this.execute('auth.logout', null)
         this.meta = null
     }
 
