@@ -4,11 +4,6 @@ import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
 import { withTmpDir } from '@/utilities'
 import { $ } from 'bun'
 
-// @ts-expect-error: it does not find the file even though it is there
-import skeleton1 from './skeleton1.cpp' with { type: 'text' }
-// @ts-expect-error: it does not find the file even though it is there
-import skeleton2 from './skeleton2.cpp' with { type: 'text' }
-
 export async function genCppClient(dir: ApiDir): Promise<string> {
     const preamble = genPreamble(dir.info)
     const skeleton1 = await genSkeleton1()
@@ -97,11 +92,11 @@ g++ -std=c++20 program.cpp -l ssl -l crypto
 }
 
 async function genSkeleton1() {
-    return skeleton1
+    await Bun.file('src/clients/cpp/skeleton1.cpp').text()
 }
 
 async function genSkeleton2() {
-    return skeleton2
+    await Bun.file('src/clients/cpp/skeleton2.cpp').text()
 }
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
