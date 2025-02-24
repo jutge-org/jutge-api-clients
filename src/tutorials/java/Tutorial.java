@@ -55,8 +55,8 @@ public class Tutorial {
 
         // All previous functions where public, but in order to access
         // other functions, we need to login using Jutge.org credentials.
-        String email = "jpetit@cs.upc.edu";
-        String password = "finsalscollonsOO";
+        String email = "...";
+        String password = "...";
         jutge.login(email, password);
 
         // Get user's name and uid in the profile.
