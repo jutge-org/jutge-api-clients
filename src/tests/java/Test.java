@@ -23,20 +23,15 @@ public class Test {
 
     static void test_tables() throws Exception {
         JutgeApiClient client = new JutgeApiClient();
-
         JutgeApiClient.AllTables tables = client.tables.get();
         check(tables.languages.size() == 5);
     }
 
     static void test_logo() throws Exception {
         JutgeApiClient client = new JutgeApiClient();
-
         JutgeApiClient.Download download = client.misc.getLogo();
-        System.out.println(download.name);
-        System.out.println(download.type);
         check(download.name.equals("jutge.png"));
         check(download.type.equals("image/png"));
-
         FileOutputStream fos = new FileOutputStream("logo.png");
         fos.write(download.data);
         fos.close();
