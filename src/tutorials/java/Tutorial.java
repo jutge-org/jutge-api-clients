@@ -30,9 +30,7 @@ public class Tutorial {
 
         // Download the Jutge logo, save it to a file and show it in the browser
         var logo = jutge.misc.getLogo();
-        FileOutputStream fos = new FileOutputStream("logo.png");
-        fos.write(logo.data);
-        fos.close();
+        logo.write("logo.png");
 
         // Get all compilers and print their name for those that are C++
         var compilers = jutge.tables.getCompilers();
@@ -83,7 +81,7 @@ public class Tutorial {
             }
         }
         Collections.sort(accepteds);
-        List<String> first8 = accepteds.stream().limit(8).collect(Collectors.toList());
+        var first8 = accepteds.stream().limit(8).collect(Collectors.toList());
         System.out.println(first8);
         System.out.println();
 

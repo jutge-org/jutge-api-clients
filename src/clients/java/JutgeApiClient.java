@@ -86,6 +86,12 @@ public class JutgeApiClient {
         public byte[] data;
         public String name;
         public String type;
+
+        public void write(String path) throws IOException {
+            FileOutputStream fos = new FileOutputStream(path);
+            fos.write(data);
+            fos.close();
+        }
     }
 
     private static class Execution {
