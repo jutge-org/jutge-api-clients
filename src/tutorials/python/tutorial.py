@@ -6,14 +6,14 @@ This is a tutorial script that shows how to use the Jutge API client in Python.
 Full reference documentation is available at https://api.jutge.org
 """
 
-# Import some useful libraries
+# Import the Jutge API client
+import jutge_api_client as j
+
+# Import some other useful libraries
 import webbrowser
 import os
 from rich import print
 from rich.prompt import Prompt
-
-# Import the Jutge API client
-import jutge_api_client as j
 
 # Create a Jutge API client
 jutge = j.JutgeApiClient()

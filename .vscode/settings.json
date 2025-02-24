@@ -85,6 +85,8 @@
         "map": "cpp",
         "unordered_map": "cpp",
         "sstream": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "forward_list": "cpp",
+        "numeric": "cpp"
     }
 }
