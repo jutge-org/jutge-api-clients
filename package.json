@@ -21,7 +21,7 @@
         "test-python": "(cd src/tests/python && pytest)",
         "test-typescript": "(cd src/tests/typescript && bun test)",
         "test-java": "(cd src/tests/java && make && make test)",
-        "test-cpp": "(cd src/tests/cpp && make && ./tests.exe)",
+        "test-cpp": "(cd src/tests/cpp && make && make test)",
         "test-all": "bun test-python ; bun test-typescript; bun test-cpp"
     }
 }
