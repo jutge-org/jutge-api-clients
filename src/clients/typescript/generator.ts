@@ -1,5 +1,6 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
+import * as prettier from 'prettier'
 
 export async function genTypeScriptClient(dir: ApiDir): Promise<string> {
     const skeleton = await Bun.file('src/clients/typescript/skeleton.ts').text()
@@ -16,7 +17,18 @@ export async function genTypeScriptClient(dir: ApiDir): Promise<string> {
         .replaceAll('\n\n\n', '\n\n')
         .replaceAll('\n\n\n', '\n\n')
         .replaceAll('\n\n\n', '\n\n')
-    return source
+        .replaceAll('// @ts-expect-error: CredentialsOut is not defined here', '') // removes warning
+    const formatted = await format(source)
+    return formatted
+}
+
+async function format(source: string): Promise<string> {
+    return await prettier.format(source, {
+        semi: false,
+        parser: 'babel-ts',
+        tabWidth: 4,
+        printWidth: 120,
+    })
 }
 
 function genPreamble(info: ApiInfo): string {
