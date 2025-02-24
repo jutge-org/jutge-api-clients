@@ -30,8 +30,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.net.HttpURLConnection;
-import java.io.DataOutputStream;
-import java.io.OutputStream;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -372,8 +371,25 @@ public class JutgeApiClient {
     }
 
     public Execution execute(String func, JsonElement ijson, byte[][] ifiles) throws Exception {
-        MultipartClient client = new MultipartClient();
+        var client = new MultipartClient();
         return client.execute(JUTGE_API_URL, func, ijson, ifiles, meta);
+    }
+
+    public void login(String email, String password) throws Exception {
+        var credentialsIn = new CredentialsIn();
+        credentialsIn.email = email;
+        credentialsIn.password = password;
+        var credentialsOut = auth.login(credentialsIn);
+        if (credentialsOut.token.equals("")) {
+            System.err.println(credentialsOut.error);
+            System.exit(1);
+        }
+        meta = new Meta(credentialsOut.token);
+    }
+
+    public void logout() throws Exception {
+        auth.logout();
+        meta = null;
     }
 
     // MAIN_MODULE_HERE
