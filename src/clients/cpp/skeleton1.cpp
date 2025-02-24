@@ -3,43 +3,21 @@
 
 // includes
 #include "httplib.h"
+#include "json.hpp"
 #include <fstream>
 #include <map>
-#include <nlohmann/json.hpp>
 #include <optional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <tuple>
-#include <variant>
 #include <vector>
 
-// extend JSON library to support std::variant and std::optional
+// extend JSON library to support std::optional
 // see https://github.com/nlohmann/json?tab=readme-ov-file#how-do-i-convert-third-party-types
 // and https://www.kdab.com/jsonify-with-nlohmann-json/
 
 namespace nlohmann {
-template <typename T, typename... Ts>
-void variant_from_json(const nlohmann::json& j, std::variant<Ts...>& data)
-{
-    try {
-        data = j.get<T>();
-    } catch (...) {
-    }
-}
-
-template <typename... Ts>
-struct adl_serializer<std::variant<Ts...>> {
-    static void to_json(nlohmann::json& j, const std::variant<Ts...>& data)
-    {
-        std::visit([&j](const auto& v) { j = v; }, data);
-    }
-
-    static void from_json(const nlohmann::json& j, std::variant<Ts...>& data)
-    {
-        (variant_from_json<Ts>(j, data), ...);
-    }
-};
 
 template <typename T>
 struct adl_serializer<std::optional<T>> {

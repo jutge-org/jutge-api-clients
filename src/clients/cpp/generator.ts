@@ -85,6 +85,7 @@ https://github.com/yhirose/cpp-httplib
 Compilation:
 
 g++ -std=c++20 program.cpp -l ssl -l crypto
+g++ -I/opt/homebrew/include -std=c++20 program.cpp -l ssl -l crypto
 
 **/
 
@@ -92,11 +93,11 @@ g++ -std=c++20 program.cpp -l ssl -l crypto
 }
 
 async function genSkeleton1() {
-    await Bun.file('src/clients/cpp/skeleton1.cpp').text()
+    return await Bun.file('src/clients/cpp/skeleton1.cpp').text()
 }
 
 async function genSkeleton2() {
-    await Bun.file('src/clients/cpp/skeleton2.cpp').text()
+    return await Bun.file('src/clients/cpp/skeleton2.cpp').text()
 }
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
@@ -299,8 +300,8 @@ function typify(model: any, name?: string): string {
     } else if ('anyOf' in model) {
         if (model.anyOf.length == 2 && model.anyOf[1].type === 'null') {
             return `std::optional<${typify(model.anyOf[0], name)}>`
-        } else if (model.anyOf.length == 3 && model.anyOf[0].type === 'Date') {
-            return `${typify(model.anyOf[0], name)}`
+        } else if (model.anyOf.length == 4 && model.anyOf[0].type === 'Date') {
+            return `std::string`
         } else {
             return `std::variant<${model.anyOf.map(typify).join(', ')}>`
         }
