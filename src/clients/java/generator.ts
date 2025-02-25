@@ -202,8 +202,19 @@ ${indent2(submodules_inits.join('\n'))}
         }
 
         let init
-        if (input.type === 'void') init = 'null'
-        else init = `new Gson().toJsonTree(${args}).getAsJsonObject()`
+        if (input.type === 'void') {
+            init = 'null'
+        } else if (endpoint.input.type == 'string') {
+            init = `JsonParser.parseString(${endpoint.input.param || 'data'})`
+        } else if (
+            endpoint.input.type == 'int' ||
+            endpoint.input.type == 'number' ||
+            endpoint.input.type == 'integer'
+        ) {
+            init = `JsonParser.parseString(String.valueOf(${endpoint.input.param || 'data'}))`
+        } else {
+            init = `new Gson().toJsonTree(${args}).getAsJsonObject()`
+        }
 
         const code1 = `${inlined ? '' : `JsonElement ijson = ${init};\n`}Execution execution = root.execute("${root ? '' : path.splice(1).join('.') + '.'}${name}", ijson, the_ifiles);`
 
