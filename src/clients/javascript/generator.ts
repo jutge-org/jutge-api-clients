@@ -20,6 +20,13 @@ jutge_api_client = {
 ${modules}
 
 }
+
+
+// my hack to allow using in the browser and the console
+try {
+    module.exports = { jutge_api_client }
+} catch (error) { }
+
 `
     const formatted = await format(source)
     return formatted

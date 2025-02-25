@@ -41,5 +41,8 @@ You can run the existing tests with:
 ```shell
 bun test-python
 bun test-typescript
-bun test-all
+bun test-javascript
+bun test-cpp
+bun test-java
+bun test-all    # all the above
 ```
