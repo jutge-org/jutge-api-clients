@@ -233,9 +233,16 @@ using Blob = string;
 using Files = vector<Blob>;
 
 struct Download {
-    Blob content;
+    Blob data;
     string name;
     string type;
+
+    void write(string path)
+    {
+        ofstream file(path);
+        file << data;
+        file.close();
+    }
 };
 
 using Downloads = vector<Download>;
@@ -285,4 +292,5 @@ tuple<json, Downloads> execute(const string& func, const json& ijson, const File
     }
     return { answer["output"], ofiles };
 }
-}
+
+} // end namespace jutge_api_client

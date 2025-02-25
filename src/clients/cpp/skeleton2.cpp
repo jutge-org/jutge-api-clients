@@ -1,17 +1,7 @@
-// Quick login function that reads the credentials from ~/.jutge-client.json
-// and stores the token in the global variable meta.
-// TODO: We could improve this function to mimin the Python one.
 
-void login()
+void login(string email, string password)
 {
-    string home = getenv("HOME");
-    const string path = home + "/.jutge-client.json";
-    ifstream ifs(path);
-    json j;
-    ifs >> j;
-    ifs.close();
-
-    const CredentialsIn credentials_in = j;
+    const CredentialsIn credentials_in = { email, password };
     try {
         const CredentialsOut credentials_out = auth::login(credentials_in);
         meta = Meta { credentials_out.token };
@@ -19,4 +9,10 @@ void login()
         cout << "login failed" << endl;
         exit(1);
     }
+}
+
+void logout()
+{
+    auth::logout();
+    meta = nullopt;
 }
