@@ -33,7 +33,7 @@ int main()
          << ", submissions: " << stats.submissions << endl;
     cout << endl;
 
-    // Download the Jutge logo, save it to a file and show it in the browser
+    // Download the Jutge logo and save it to a file
     auto download = misc::get_logo();
     download.write("logo.png");
 
