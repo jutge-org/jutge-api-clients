@@ -1,5 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
+import * as prettier from 'prettier'
 
 export async function genJavaScriptClient(dir: ApiDir): Promise<string> {
     const skeleton = await genSkeleton()
@@ -19,7 +21,17 @@ ${modules}
 
 }
 `
-    return source
+    const formatted = await format(source)
+    return formatted
+}
+
+async function format(source: string): Promise<string> {
+    return await prettier.format(source, {
+        semi: false,
+        parser: 'babel',
+        tabWidth: 4,
+        printWidth: 120,
+    })
 }
 
 function genPreamble(info: ApiInfo): string {
@@ -42,7 +54,7 @@ ${info.description}
 }
 
 async function genSkeleton() {
-    return await Bun.file('src/clients/typescript/skeleton.ts').text()
+    return await Bun.file('src/clients/javascript/skeleton.js').text()
 }
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
@@ -92,10 +104,11 @@ function genEndpoint(endpoint: ApiEndpointDir, path: string, root: boolean = fal
     }
 
     return `
-${toCamelCase(name)}: async function (${params}) {
+
     /**
     ${summary || 'No summary'}${actor ? '\n\n    🔐 Authenticated' : ''}    ${status ? `\n    ❌ Warning: ${status}` : ''}    ${description ? '\n\n    ' + description : ''}
     **/
+${toCamelCase(name)}: async function (${params}) {
 
     ${code1}
     ${code2}
