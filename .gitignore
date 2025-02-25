@@ -9,6 +9,7 @@ src/tests/java/logo.png
 src/tests/cpp/*.exe
 src/tests/cpp/*.o
 src/tests/cpp/logo.png
+src/tests/php/.phpunit.result.cache
 
 src/tutorials/python/__pycache__
 src/tutorials/python/logo.png

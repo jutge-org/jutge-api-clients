@@ -60,7 +60,7 @@ function genEndpoint(func: ApiEndpointDir, path: string, root: boolean = false):
         argument = dolar + (input.param || 'data')
     }
 
-    const code = `return \\client\\execute('${root ? '' : path + '.'}${name}', ${argument});`
+    const code = `return \\jutge\\execute('${root ? '' : path + '.'}${name}', ${argument});`
 
     return `
 /*
@@ -85,7 +85,7 @@ function genSubModule(mod: ApiModuleDir, path: string): string {
 
     return `
 ${description}
-namespace client\\${path.replace(/\./g, '\\')};
+namespace jutge\\${path.replace(/\./g, '\\')};
 
 ${module}
 
