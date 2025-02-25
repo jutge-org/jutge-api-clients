@@ -1,4 +1,3 @@
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,14 +43,12 @@ public class Tutorial {
 
         // Get P68688 (Hello, world!) problem and print its title, author and English
         // statement.
-        /*
-         * var problem = jutge.problems.getProblem("P68688_en");
-         * System.out.println(problem.title);
-         * System.out.println(problem.abstract_problem.author);
-         * String statement = jutge.problems.getTextStatement("P68688_en");
-         * System.out.println(statement);
-         * System.out.println();
-         */
+        var problem = jutge.problems.getProblem("P68688_en");
+        System.out.println(problem.title);
+        System.out.println(problem.abstract_problem.author);
+        String statement = jutge.problems.getTextStatement("P68688_en");
+        System.out.println(statement);
+        System.out.println();
 
         // All previous functions where public, but in order to access
         // other functions, we need to login using Jutge.org credentials.
@@ -84,11 +81,9 @@ public class Tutorial {
         System.out.println();
 
         // Get the status of P68688
-        /*
-         * var status = jutge.student.statuses.getForAbstractProblem("P68688");
-         * System.out.println(status);
-         * System.out.println();
-         */
+        var status = jutge.student.statuses.getForAbstractProblem("P68688");
+        System.out.println(status.status);
+        System.out.println();
 
         // Logout is optional, but recommended.
         jutge.logout();
