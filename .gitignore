@@ -7,12 +7,16 @@ src/tests/typescript/logo.png
 src/tests/java/*.class
 src/tests/java/logo.png
 src/tests/cpp/*.exe
+src/tests/cpp/*.o
 src/tests/cpp/logo.png
 
 src/tutorials/python/__pycache__
 src/tutorials/python/logo.png
 src/tutorials/java/*.class
 src/tutorials/java/logo.png
+src/tutorials/cpp/*.exe
+src/tutorials/cpp/*.o
+src/tutorials/cpp/logo.png
 
 node_modules/
 .DS_Store

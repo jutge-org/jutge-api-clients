@@ -4,14 +4,8 @@
  * Full reference documentation is available at https://api.org
  */
 
+// Include the Jutge API client header file
 #include "jutge_api_client.cpp"
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <memory>
-#include <string>
-#include <vector>
 
 using namespace jutge_api_client;
 using namespace std;
