@@ -1,5 +1,7 @@
 import java.io.FileOutputStream;
 
+import com.jutge.api.JutgeApiClient;
+
 class TestException extends Exception {
 }
 

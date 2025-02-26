@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.jutge.api.JutgeApiClient;
+
 /**
  * This is a tutorial script that shows how to use the Jutge API client in Java.
  *
