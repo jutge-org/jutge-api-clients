@@ -38,7 +38,7 @@ ${modules}
 
 ${skeleton2}
 
-}
+} // end namespace jutge_api_client
 
 #endif
 

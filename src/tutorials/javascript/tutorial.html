@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="jutge_api_client.js"></script>
+</head>
+
+<body>
+    <p>This is a simple demo os using the JavaScript client for the API of Jutge.org. Open the HTML source!</p>
+    <p id="fortune">fortune</p>
+    <p id="time">time</p>
+    <p id="inc">inc</p>
+    <p><img id="logo"></img></p>
+
+    <button onclick="fortune()">Get fortune</button>
+    <button onclick="time()">Get time</button>
+    <button onclick="inc()">Inc pair</button>
+    <button onclick="logo()">Get logo</button>
+
+    <script>
+        var jutge = jutge_api_client
+
+        async function fortune() {
+            document.getElementById('fortune').innerText = await jutge.misc.getFortune()
+        }
+
+        async function time() {
+            document.getElementById('time').innerText = JSON.stringify(await jutge.misc.getTime())
+        }
+        var pair = { a: 1, b: 2 }
+
+        async function inc() {
+            pair = await jutge.testing.playground.inc(pair)
+            document.getElementById('inc').innerText = JSON.stringify(pair)
+        }
+
+        async function logo() {
+            const download = await jutge.misc.getLogo()
+            document.getElementById('logo').src = URL.createObjectURL(
+                new Blob([download.data], { type: 'image/png' })
+            )
+        }
+    </script>
+</body>
+
+</html>

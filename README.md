@@ -21,11 +21,7 @@ to install the TypeScript dependencies.
 You need a relatively new Python (>=3.12). You may install its dependencies with:
 
 ```shell
-<<<<<<< Updated upstream
-python -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich pydantic
-=======
 python3 -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich pydantic ruff
->>>>>>> Stashed changes
 ```
 
 ## Generate clients
@@ -45,5 +41,9 @@ You can run the existing tests with:
 ```shell
 bun test-python
 bun test-typescript
-bun test-all
+bun test-javascript
+bun test-cpp
+bun test-java
+bun test-php
+bun test-all    # all the above
 ```

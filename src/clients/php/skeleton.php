@@ -1,6 +1,6 @@
 <?php
 
-namespace client;
+namespace jutge;
 
 
 $meta = null;
