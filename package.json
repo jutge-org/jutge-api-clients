@@ -26,6 +26,6 @@
         "test-cpp": "(cd src/tests/cpp && make && make test)",
         "test-javascript": "(cd src/tests/javascript && bun test)",
         "test-php": "(cd src/tests/php && make test)",
-        "test-all": "bun test-python ; bun test-typescript ; bun test-cpp ; bun test-javascript ; bun test-php"
+        "test-all": "bun test-python ; bun test-typescript ; bun test-cpp ; bun test-javascript ; bun test-php; bun test-java"
     }
 }
