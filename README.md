@@ -21,7 +21,7 @@ to install the TypeScript dependencies.
 You need a relatively new Python (>=3.12). You may install its dependencies with:
 
 ```shell
-python3 -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich pydantic
+python3 -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich pydantic ruff
 ```
 
 ## Generate clients

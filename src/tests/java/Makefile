@@ -1,8 +1,8 @@
 all:
-	javac -cp gson-2.12.1.jar:. Test.java
+	javac -cp JutgeApiClient-fat.jar:. Test.java
 
 test: all
-	java -cp gson-2.12.1.jar:. Test
+	java -cp JutgeApiClient-fat.jar:. Test
 
 clean:
 	rm -rf *.class logo.png
