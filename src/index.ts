@@ -32,12 +32,10 @@ await Bun.write(destination + '/jutge_api_client.js', await genJavaScriptClient(
 console.log(chalk.blue('PHP'))
 await Bun.write(destination + '/jutge_api_client.php', await genPhpClient(directory))
 
-
-
 console.log(chalk.blue('Java'))
 
 const javaDestination = path.join(destination, 'com', 'jutge', 'api')
-const gsonPath = "src/lib/java/gson-2.12.1.jar"
+const gsonPath = 'src/lib/java/gson-2.12.1.jar'
 await fs.mkdir(javaDestination, { recursive: true })
 
 await Bun.write(javaDestination + '/JutgeApiClient.java', await genJavaClient(directory))
