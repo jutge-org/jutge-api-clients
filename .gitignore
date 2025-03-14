@@ -23,3 +23,4 @@ src/tutorials/cpp/logo.png
 node_modules/
 .DS_Store
 *~
+.ruff_cache
