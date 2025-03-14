@@ -22,13 +22,13 @@ type ClientInfo = {
     ext: string
 }
 
-const clients: Record<Language, ClientInfo> = {
-    java: { name: 'Java', ext: '.java' },
+export const clients: Record<Language, ClientInfo> = {
     python: { name: 'Python', ext: '.py' },
     typescript: { name: 'TypeScript', ext: '.ts' },
     javascript: { name: 'JavaScript', ext: '.js' },
-    php: { name: 'PHP', ext: '.php' },
+    java: { name: 'Java', ext: '.java' },
     cpp: { name: 'C++', ext: '.cpp' },
+    php: { name: 'PHP', ext: '.php' },
 }
 
 export const getAPIDirectory = async () => {
