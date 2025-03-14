@@ -22,6 +22,6 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["src/clients/*.ts", "src/index.ts", "src/types.ts", "src/utilities.ts"],
+    "include": ["src/clients/*.ts", "src/gen-client.ts", "src/types.ts", "src/utilities.ts"],
     "exclude": ["node_modules"]
 }
