@@ -43,9 +43,7 @@
         "radash": "^12.1.0"
     },
     "scripts": {
-        "build": "bun build ./src/index.ts --format esm --target node --banner '#!/usr/bin/env node' --outfile bin/jutge-api-client",
-        "gen": "bun run src/index.ts",
-        "clean": "(rm out/*)",
+        "build": "bun build --compile --outfile=bin/jutge-api-client ./src/index.ts",
         "lint": "eslint src",
         "format": "bun prettier src --write",
         "test-python": "(cd src/tests/python && pytest)",
@@ -63,7 +61,7 @@
         "trailingComma": "all",
         "tabWidth": 4,
         "semi": false,
-        "singleQuote": false,
+        "singleQuote": true,
         "useTabs": false,
         "arrowParens": "always",
         "printWidth": 120
