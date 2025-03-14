@@ -4,13 +4,12 @@ import { genJavaScriptClient } from '@/clients/javascript/generator'
 import { genPhpClient } from '@/clients/php/generator'
 import { genPythonClient } from '@/clients/python/generator'
 import { genTypeScriptClient } from '@/clients/typescript/generator'
-import { promises as fs } from 'fs'
 import chalk from 'chalk'
+import { exec as syncExec } from 'child_process'
+import { promises as fs } from 'fs'
 import path from 'path'
-import { spawn } from 'child_process'
 import util from 'util'
-import { cwd } from 'process'
-const exec = util.promisify(require('child_process').exec)
+const exec = util.promisify(syncExec)
 
 const url = 'https://api.jutge.org/api/dir'
 const destination = 'out'
