@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "lib": ["ESNext", "DOM", "DOM.Iterable"],
+        "lib": ["ESNext", "DOM"],
         "target": "ESNext",
         "module": "ESNext",
         "moduleDetection": "force",
@@ -8,7 +8,10 @@
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "verbatimModuleSyntax": true,
-        "noEmit": true,
+        /* Output */
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "./dist",
         /* Linting */
         "skipLibCheck": true,
         "strict": true,
@@ -19,6 +22,6 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "**/doc/*.md"],
+    "include": ["src/clients/*.ts", "src/index.ts", "src/types.ts", "src/utilities.ts"],
     "exclude": ["node_modules"]
 }

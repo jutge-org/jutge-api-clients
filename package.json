@@ -1,7 +1,29 @@
 {
-    "name": "jutge-api-clients",
-    "module": "index.ts",
+    "name": "@jutge.org/api-clients",
+    "version": "0.1.0",
+    "description": "Jutge.org API client generator library",
+    "keywords": [
+        "jutge.org",
+        "client",
+        "generator"
+    ],
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jutge-org/cli.git"
+    },
+    "homepage": "https://api.jutge.org/clients",
+    "module": "./dist/index.js",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "type": "module",
+    "files": [
+        "./dist",
+        "package.json"
+    ],
+    "exports": "./dist/api-clients.js",
     "devDependencies": {
         "@types/bun": "^1.2.3"
     },
@@ -19,6 +41,7 @@
         "radash": "^12.1.0"
     },
     "scripts": {
+        "build": "bun build ./src/index.ts --format esm --target bun --outfile dist/index.js",
         "gen": "bun run src/index.ts",
         "clean": "(rm out/*)",
         "lint": "eslint src",
