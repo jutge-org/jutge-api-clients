@@ -4,11 +4,21 @@ import { genJavaScriptClient } from '@/clients/javascript/generator'
 import { genPhpClient } from '@/clients/php/generator'
 import { genPythonClient } from '@/clients/python/generator'
 import { genTypeScriptClient } from '@/clients/typescript/generator'
+import chalk from 'chalk'
+import { exec as syncExec } from 'child_process'
+import { promises as fs } from 'fs'
+import path from 'path'
+import util from 'util'
+const exec = util.promisify(syncExec)
 
-export const generateClient = async (
-    directory: ApiDir,
-    language: 'cpp' | 'java' | 'javascript' | 'php' | 'python' | 'typescript',
-) => {
+type Language = 'cpp' | 'java' | 'javascript' | 'php' | 'python' | 'typescript'
+
+const API_URL = 'https://api.jutge.org/api/dir'
+const DESTINATION_DIR = 'out'
+
+export const generateClient = async (language: Language) => {
+    const request = await fetch(API_URL)
+    const directory = await request.json()
     switch (language) {
         case 'cpp':
             return await genCppClient(directory)
@@ -27,46 +37,31 @@ export const generateClient = async (
     }
 }
 
-import chalk from 'chalk'
-import { exec as syncExec } from 'child_process'
-import { promises as fs } from 'fs'
-import path from 'path'
-import util from 'util'
-import type { ApiDir } from './types'
-const exec = util.promisify(syncExec)
+const clients = [
+    { name: 'Python', lang: 'python', ext: '.py' },
+    { name: 'TypeScript', lang: 'typescript', ext: '.ts' },
+    { name: 'JavaScript', lang: 'javascript', ext: '.js' },
+    { name: 'PHP', lang: 'php', ext: '.php' },
+    { name: 'C++', lang: 'cpp', ext: '.cpp' },
+]
 
-const url = 'https://api.jutge.org/api/dir'
-const destination = 'out'
+for (const { name, lang, ext } of clients) {
+    console.log(chalk.blue(name))
+    await Bun.write(`${DESTINATION_DIR}/jutge_api_client${ext}`, await generateClient(lang as Language))
+}
 
-const request = await fetch(url)
-const directory = await request.json()
-
-console.log(chalk.blue('Python'))
-await Bun.write(destination + '/jutge_api_client.py', await genPythonClient(directory))
-
-console.log(chalk.blue('TypeScript'))
-await Bun.write(destination + '/jutge_api_client.ts', await genTypeScriptClient(directory))
-
-console.log(chalk.blue('C++'))
-await Bun.write(destination + '/jutge_api_client.cpp', await genCppClient(directory))
-
-console.log(chalk.blue('JavaScript'))
-await Bun.write(destination + '/jutge_api_client.js', await genJavaScriptClient(directory))
-
-console.log(chalk.blue('PHP'))
-await Bun.write(destination + '/jutge_api_client.php', await genPhpClient(directory))
-
+// NOTE: Java needs some extra steps
 console.log(chalk.blue('Java'))
 
-const javaDestination = path.join(destination, 'com', 'jutge', 'api')
+const javaDestination = path.join(DESTINATION_DIR, 'com', 'jutge', 'api')
 const gsonPath = 'src/lib/java/gson-2.12.1.jar'
 await fs.mkdir(javaDestination, { recursive: true })
 
-await Bun.write(javaDestination + '/JutgeApiClient.java', await genJavaClient(directory))
+await Bun.write(javaDestination + '/JutgeApiClient.java', await generateClient('java'))
 
 await exec(`javac -cp ../../../../` + gsonPath + ` *.java`, { cwd: javaDestination })
-await exec(`mkdir -p gson-temp`, { cwd: destination })
-await exec(`jar xf ../../` + gsonPath, { cwd: destination + `/gson-temp` })
-await exec(`jar cf JutgeApiClient-fat.jar -C . com/jutge/api -C gson-temp .`, { cwd: destination })
+await exec(`mkdir -p gson-temp`, { cwd: DESTINATION_DIR })
+await exec(`jar xf ../../` + gsonPath, { cwd: DESTINATION_DIR + `/gson-temp` })
+await exec(`jar cf JutgeApiClient-fat.jar -C . com/jutge/api -C gson-temp .`, { cwd: DESTINATION_DIR })
 
-await exec(`rm -r com/ gson-temp/`, { cwd: destination })
+await exec(`rm -r com/ gson-temp/`, { cwd: DESTINATION_DIR })

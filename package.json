@@ -1,6 +1,6 @@
 {
     "name": "@jutge.org/api-clients",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Jutge.org API client generator library",
     "keywords": [
         "jutge.org",
