@@ -4,11 +4,35 @@ import { genJavaScriptClient } from '@/clients/javascript/generator'
 import { genPhpClient } from '@/clients/php/generator'
 import { genPythonClient } from '@/clients/python/generator'
 import { genTypeScriptClient } from '@/clients/typescript/generator'
+
+export const generateClient = async (
+    directory: ApiDir,
+    language: 'cpp' | 'java' | 'javascript' | 'php' | 'python' | 'typescript',
+) => {
+    switch (language) {
+        case 'cpp':
+            return await genCppClient(directory)
+        case 'java':
+            return await genJavaClient(directory)
+        case 'javascript':
+            return await genJavaScriptClient(directory)
+        case 'php':
+            return await genPhpClient(directory)
+        case 'python':
+            return await genPythonClient(directory)
+        case 'typescript':
+            return await genTypeScriptClient(directory)
+        default:
+            throw new Error(`Language ${language} not supported`)
+    }
+}
+
 import chalk from 'chalk'
 import { exec as syncExec } from 'child_process'
 import { promises as fs } from 'fs'
 import path from 'path'
 import util from 'util'
+import type { ApiDir } from './types'
 const exec = util.promisify(syncExec)
 
 const url = 'https://api.jutge.org/api/dir'
