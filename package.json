@@ -18,7 +18,7 @@
     "scripts": {
         "gen": "bun run src/index.ts",
         "clean": "(rm out/*)",
-        "lint": "bun eslint src",
+        "lint": "eslint src",
         "format": "bun prettier src --write",
         "test-python": "(cd src/tests/python && pytest)",
         "test-typescript": "(cd src/tests/typescript && bun test)",
