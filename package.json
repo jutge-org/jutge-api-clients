@@ -30,5 +30,17 @@
         "test-javascript": "(cd src/tests/javascript && bun test)",
         "test-php": "(cd src/tests/php && make test)",
         "test-all": "bun test-python ; bun test-typescript ; bun test-cpp ; bun test-javascript ; bun test-php; bun test-java"
+    },
+    "prettier": {
+        "plugins": [
+            "prettier-plugin-organize-imports"
+        ],
+        "trailingComma": "all",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true,
+        "useTabs": false,
+        "arrowParens": "always",
+        "printWidth": 120
     }
 }
