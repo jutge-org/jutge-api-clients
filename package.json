@@ -14,24 +14,6 @@
     "homepage": "https://api.jutge.org/clients",
     "type": "module",
     "module": "./src/index.ts",
-    "devDependencies": {
-        "@types/bun": "^1.2.5"
-    },
-    "peerDependencies": {
-        "typescript": "^5.7.3"
-    },
-    "dependencies": {
-        "@commander-js/extra-typings": "^12.1.0",
-        "commander": "^12.1.0",
-        "@eslint/eslintrc": "^3.3.0",
-        "@eslint/js": "^9.22.0",
-        "@sinclair/typebox": "^0.34.30",
-        "@typescript-eslint/eslint-plugin": "^8.26.1",
-        "chalk": "^5.4.1",
-        "prettier": "^3.5.3",
-        "prettier-plugin-organize-imports": "^4.1.0",
-        "radash": "^12.1.0"
-    },
     "scripts": {
         "gen": "bun run src/gen.ts",
         "lint": "eslint src",
@@ -43,6 +25,24 @@
         "test-javascript": "(cd src/tests/javascript && bun test)",
         "test-php": "(cd src/tests/php && make test)",
         "test-all": "bun test-python ; bun test-typescript ; bun test-cpp ; bun test-javascript ; bun test-php; bun test-java"
+    },
+    "dependencies": {
+        "@commander-js/extra-typings": "^12.1.0",
+        "commander": "^12.1.0",
+        "@eslint/eslintrc": "^3.3.0",
+        "@eslint/js": "^9.22.0",
+        "@sinclair/typebox": "^0.34.27",
+        "@typescript-eslint/eslint-plugin": "^8.26.1",
+        "chalk": "^5.4.1",
+        "prettier": "^3.5.2",
+        "prettier-plugin-organize-imports": "^4.1.0",
+        "radash": "^12.1.0"
+    },
+    "devDependencies": {
+        "@types/bun": "^1.2.3"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
     },
     "prettier": {
         "plugins": [
