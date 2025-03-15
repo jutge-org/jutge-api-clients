@@ -36,7 +36,7 @@ export const getAPIDirectory = async () => {
     return await request.json()
 }
 
-const _generate = async (lang: Language, dir: ApiDir) => {
+export const generateClientSource = async (lang: Language, dir: ApiDir) => {
     switch (lang) {
         case 'cpp':
             return await genCppClient(dir)
@@ -55,26 +55,42 @@ const _generate = async (lang: Language, dir: ApiDir) => {
     }
 }
 
-export const generateClient = async (lang: Language, destinationDir: string) => {
+const createJavaJar = async (directory: ApiDir, destinationDir: string) => {
+    const javaDestination = path.join(destinationDir, 'com', 'jutge', 'api')
+    const gsonPath = 'src/lib/java/gson-2.12.1.jar'
+    await fs.mkdir(javaDestination, { recursive: true })
+
+    await Bun.write(javaDestination + '/JutgeApiClient.java', await generateClientSource('java', directory))
+
+    await exec(`javac -cp ../../../../` + gsonPath + ` *.java`, { cwd: javaDestination })
+    await exec(`mkdir -p gson-temp`, { cwd: destinationDir })
+    await exec(`jar xf ../../` + gsonPath, { cwd: destinationDir + `/gson-temp` })
+    await exec(`jar cf JutgeApiClient-fat.jar -C . com/jutge/api -C gson-temp .`, { cwd: destinationDir })
+
+    await exec(`rm -r com/ gson-temp/`, { cwd: destinationDir })
+}
+
+export const generateClient = async (lang: Language, destinationDir: string): Promise<string> => {
     const directory = await getAPIDirectory()
     const info = clients[lang]
 
-    console.log(chalk.blue(info.name))
-
+    // Exception for Java (must create a .jar which contains the client and the gson library)
     if (lang === 'java') {
-        const javaDestination = path.join(destinationDir, 'com', 'jutge', 'api')
-        const gsonPath = 'src/lib/java/gson-2.12.1.jar'
-        await fs.mkdir(javaDestination, { recursive: true })
-
-        await Bun.write(javaDestination + '/JutgeApiClient.java', await _generate('java', directory))
-
-        await exec(`javac -cp ../../../../` + gsonPath + ` *.java`, { cwd: javaDestination })
-        await exec(`mkdir -p gson-temp`, { cwd: destinationDir })
-        await exec(`jar xf ../../` + gsonPath, { cwd: destinationDir + `/gson-temp` })
-        await exec(`jar cf JutgeApiClient-fat.jar -C . com/jutge/api -C gson-temp .`, { cwd: destinationDir })
-
-        await exec(`rm -r com/ gson-temp/`, { cwd: destinationDir })
-    } else {
-        await Bun.write(`${destinationDir}/jutge_api_client${info.ext}`, await _generate(lang, directory))
+        await createJavaJar(directory, destinationDir)
+        return `${destinationDir}/JutgeApiClient-fat.jar`
     }
+
+    const path = `${destinationDir}/jutge_api_client${info.ext}`
+    await Bun.write(path, await generateClientSource(lang, directory))
+    return path
+}
+
+export const generateAllClients = async (destinationDir: string) => {
+    const languages = Object.keys(clients) as Language[]
+    await Promise.allSettled(
+        languages.map(async (lang) => {
+            console.log(chalk.blue(clients[lang].name))
+            generateClient(lang, destinationDir)
+        }),
+    )
 }

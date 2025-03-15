@@ -1,6 +1,6 @@
 import { Command } from '@commander-js/extra-typings'
-import type { Language } from './gen-client'
-import { clients, generateClient } from './gen-client'
+import type { Language } from './clients'
+import { clients, generateClient } from './clients'
 
 const languages = Object.keys(clients)
     .map((c) => `'${c}'`)
@@ -8,10 +8,11 @@ const languages = Object.keys(clients)
 
 const cmd = new Command('jutge-api-client')
     .description('Generate a client for the Jutge API')
-    .option('-d, --destination <dir>', 'The directory where the client will be generated', 'client-out')
     .argument('<language>', `The language of the client to generate (${languages})`)
+    .option('-d, --destination <dir>', 'The directory to output the client to', 'out')
     .action(async (language: string, { destination }) => {
-        await generateClient(language as Language, destination)
+        const filename = await generateClient(language as Language, destination)
+        console.log(filename)
     })
 
 cmd.parse()
