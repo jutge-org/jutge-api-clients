@@ -7,7 +7,7 @@ import { genTypeScriptClient } from '@/clients/typescript/generator'
 import chalk from 'chalk'
 import { exec as syncExec } from 'child_process'
 import { promises as fs } from 'fs'
-import path from 'path'
+import path, { resolve } from 'path'
 import util from 'util'
 import type { ApiDir } from './types'
 
@@ -57,14 +57,14 @@ export const generateClientSource = async (lang: Language, dir: ApiDir) => {
 
 const createJavaJar = async (directory: ApiDir, destinationDir: string) => {
     const javaDestination = path.join(destinationDir, 'com', 'jutge', 'api')
-    const gsonPath = 'src/lib/java/gson-2.12.1.jar'
+    const gsonPath = resolve('src/lib/java/gson-2.12.1.jar')
     await fs.mkdir(javaDestination, { recursive: true })
 
     await Bun.write(javaDestination + '/JutgeApiClient.java', await generateClientSource('java', directory))
 
-    await exec(`javac -cp ../../../../` + gsonPath + ` *.java`, { cwd: javaDestination })
+    await exec(`javac -cp ${gsonPath} *.java`, { cwd: javaDestination })
     await exec(`mkdir -p gson-temp`, { cwd: destinationDir })
-    await exec(`jar xf ../../` + gsonPath, { cwd: destinationDir + `/gson-temp` })
+    await exec(`jar xf ${gsonPath}`, { cwd: destinationDir + `/gson-temp` })
     await exec(`jar cf JutgeApiClient-fat.jar -C . com/jutge/api -C gson-temp .`, { cwd: destinationDir })
 
     await exec(`rm -r com/ gson-temp/`, { cwd: destinationDir })
