@@ -18,7 +18,7 @@
         "gen": "bun run src/gen.ts",
         "lint": "eslint src",
         "format": "bun prettier src --write",
-        "test-python": "(cd src/tests/python && pytest)",
+        "test-python": "(source .venv/bin/activate && cd src/tests/python && pytest)",
         "test-typescript": "(cd src/tests/typescript && bun test)",
         "test-java": "(cd src/tests/java && make && make test)",
         "test-cpp": "(cd src/tests/cpp && make && make test)",
