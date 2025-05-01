@@ -27,6 +27,7 @@ try {
     module.exports = { jutge_api_client }
 } catch (error) { }
 
+export { jutge_api_client };
 `
     const formatted = await format(source)
     return formatted
