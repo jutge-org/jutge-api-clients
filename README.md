@@ -47,3 +47,11 @@ bun test-java
 bun test-php
 bun test-all    # all the above
 ```
+
+## Change API source
+
+If you want to change the API source, you can do it by changing the `JUTGE_API_URL` environment variable:
+
+```shell
+export JUTGE_API_URL=https://api.jutge.org/api/
+```

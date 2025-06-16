@@ -15,7 +15,8 @@ const exec = util.promisify(syncExec)
 
 export type Language = 'cpp' | 'java' | 'javascript' | 'php' | 'python' | 'typescript'
 
-const API_URL = 'https://api.jutge.org/api/dir'
+const API_URL = (process.env.JUTGE_API_URL || 'https://api.jutge.org/api') + '/dir'
+console.log('Using API URL:', API_URL)
 
 type ClientInfo = {
     name: string
@@ -86,11 +87,8 @@ export const generateClient = async (lang: Language, destinationDir: string): Pr
 }
 
 export const generateAllClients = async (destinationDir: string) => {
-    const languages = Object.keys(clients) as Language[]
-    await Promise.allSettled(
-        languages.map(async (lang) => {
-            console.log(chalk.blue(clients[lang].name))
-            generateClient(lang, destinationDir)
-        }),
-    )
+    for (const lang of Object.keys(clients) as Language[]) {
+        console.log(chalk.blue(clients[lang].name))
+        await generateClient(lang, destinationDir)
+    }
 }

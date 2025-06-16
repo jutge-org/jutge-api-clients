@@ -31,15 +31,10 @@ async function format(source: string): Promise<string> {
         const path = `${tmp}/client.py`
         Bun.write(path, source)
         try {
-            await $`ruff format --line-length=320 ${path}`.quiet()
+            await $`ruff format --line-length=320 ${path}`
             return await Bun.file(path).text()
         } catch (e) {
             console.error('Failed to format python code')
-            if (e instanceof Error && 'info' in e && e.info instanceof Object && 'stderr' in e.info && e.info.stderr) {
-                console.error(e.info.stderr)
-            } else {
-                console.error(e)
-            }
             return source
         }
     })
