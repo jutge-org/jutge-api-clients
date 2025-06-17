@@ -180,10 +180,29 @@ export class JutgeApiClient {
         }
     }
 
-    /** Simple login */
+    /** Simple login setting meta */
     // @ts-expect-error: CredentialsOut is not defined here
     async login({ email, password }: { email: string; password: string }): Promise<CredentialsOut> {
         const [credentials, _] = await this.execute('auth.login', { email, password })
+        if (credentials.error) throw new UnauthorizedError(credentials.error)
+        this.meta = { token: credentials.token }
+        return credentials
+    }
+
+    /** Simple login to exam setting meta */
+    async loginExam({
+        email,
+        password,
+        exam,
+        exam_password,
+    }: {
+        email: string
+        password: string
+        exam: string
+        exam_password: string
+        // @ts-expect-error: CredentialsOut is not defined here
+    }): Promise<CredentialsOut> {
+        const [credentials, _] = await this.execute('auth.loginExam', { email, password, exam, exam_password })
         if (credentials.error) throw new UnauthorizedError(credentials.error)
         this.meta = { token: credentials.token }
         return credentials
