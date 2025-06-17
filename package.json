@@ -15,7 +15,7 @@
     "type": "module",
     "module": "./src/index.ts",
     "scripts": {
-        "gen": "bun run src/gen.ts",
+        "gen": "source .venv/bin/activate && bun run src/gen.ts",
         "lint": "eslint src",
         "format": "bun prettier src --write",
         "test-python": "(source .venv/bin/activate && cd src/tests/python && pytest)",

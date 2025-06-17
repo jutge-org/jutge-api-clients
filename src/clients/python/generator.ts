@@ -16,6 +16,8 @@ export async function genPythonClient(dir: ApiDir): Promise<string> {
         .replace('# MODELS_HERE', models)
         .replace('# MODULES_HERE', modules)
         .replace('# MAIN_MODULE_HERE', main)
+    //return source
+    // ignore this because versions do not match
     const formatted = await format(source)
     await check(source)
     return formatted
@@ -31,7 +33,7 @@ async function format(source: string): Promise<string> {
         const path = `${tmp}/client.py`
         Bun.write(path, source)
         try {
-            await $`ruff format --line-length=320 ${path}`.quiet()
+            await $`ruff format --line-length=320 --target-version=py313 ${path}`.quiet()
             return await Bun.file(path).text()
         } catch (e) {
             console.error('Failed to format python code')
@@ -56,7 +58,7 @@ async function check(source: string): Promise<void> {
         Bun.write(path, source)
 
         try {
-            await $`ruff check ${path}`.quiet()
+            await $`ruff check  --target-version=py313 ${path}`.quiet()
         } catch (e) {
             console.error('Failed to check python code')
             if (e instanceof Error && 'info' in e && e.info instanceof Object && 'stderr' in e.info && e.info.stderr) {
