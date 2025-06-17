@@ -11,7 +11,6 @@
 
 export interface Meta {
     readonly token: string
-    readonly exam: string | null
 }
 
 export interface Download {
@@ -186,7 +185,7 @@ export class JutgeApiClient {
     async login({ email, password }: { email: string; password: string }): Promise<CredentialsOut> {
         const [credentials, _] = await this.execute('auth.login', { email, password })
         if (credentials.error) throw new UnauthorizedError(credentials.error)
-        this.meta = { token: credentials.token, exam: null }
+        this.meta = { token: credentials.token }
         return credentials
     }
 
