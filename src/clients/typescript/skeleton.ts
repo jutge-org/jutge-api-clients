@@ -86,6 +86,9 @@ export class JutgeApiClient {
     /** URL to talk with the API */
     JUTGE_API_URL = process.env.JUTGE_API_URL || 'https://api.jutge.org/api'
 
+    /** Headers to include in the API requests */
+    headers: Record<string, string> = {}
+
     /** Meta information */
     meta: Meta | null = null
 
@@ -123,6 +126,7 @@ export class JutgeApiClient {
         const response = await fetch(this.JUTGE_API_URL, {
             method: 'POST',
             body: iform,
+            headers: this.headers,
         })
 
         // process response
