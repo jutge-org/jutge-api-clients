@@ -31,7 +31,7 @@ async function format(source: string): Promise<string> {
         const path = `${tmp}/client.py`
         Bun.write(path, source)
         try {
-            await $`ruff format --line-length=320 ${path}`
+            await $`ruff format --line-length=320 ${path}`.quiet()
             return await Bun.file(path).text()
         } catch (e) {
             console.error('Failed to format python code')

@@ -15,8 +15,10 @@ const exec = util.promisify(syncExec)
 
 export type Language = 'cpp' | 'java' | 'javascript' | 'php' | 'python' | 'typescript'
 
-const API_URL = (process.env.JUTGE_API_URL || 'https://api.jutge.org/api') + '/dir'
-console.log('Using API URL:', API_URL)
+//const API_URL = (process.env.JUTGE_API_URL || 'https://api.jutge.org') + '/api/dir'
+const API_URL = "https://api.jutge.org/api/dir"
+
+// console.log('Using API URL:', API_URL)
 
 type ClientInfo = {
     name: string
