@@ -15,9 +15,6 @@ const exec = util.promisify(syncExec)
 
 export type Language = 'cpp' | 'java' | 'javascript' | 'php' | 'python' | 'typescript'
 
-//const API_URL = (process.env.JUTGE_API_URL || 'https://api.jutge.org') + '/api/dir'
-const API_URL = "https://api.jutge.org/api/dir"
-
 // console.log('Using API URL:', API_URL)
 
 type ClientInfo = {
@@ -34,8 +31,9 @@ export const clients: Record<Language, ClientInfo> = {
     php: { name: 'PHP', ext: '.php' },
 }
 
-export const getAPIDirectory = async () => {
-    const request = await fetch(API_URL)
+export const getAPIDirectory = async (url: string) => {
+    console.log("Fetching API directory from", url)
+    const request = await fetch(url)
     return await request.json()
 }
 
@@ -73,8 +71,8 @@ const createJavaJar = async (directory: ApiDir, destinationDir: string) => {
     await exec(`rm -r com/ gson-temp/`, { cwd: destinationDir })
 }
 
-export const generateClient = async (lang: Language, destinationDir: string): Promise<string> => {
-    const directory = await getAPIDirectory()
+export const generateClient = async (url: string, lang: Language, destinationDir: string): Promise<string> => {
+    const directory = await getAPIDirectory(url)
     const info = clients[lang]
 
     // Exception for Java (must create a .jar which contains the client and the gson library)
@@ -86,11 +84,4 @@ export const generateClient = async (lang: Language, destinationDir: string): Pr
     const path = `${destinationDir}/jutge_api_client${info.ext}`
     await Bun.write(path, await generateClientSource(lang, directory))
     return path
-}
-
-export const generateAllClients = async (destinationDir: string) => {
-    for (const lang of Object.keys(clients) as Language[]) {
-        console.log(chalk.blue(clients[lang].name))
-        await generateClient(lang, destinationDir)
-    }
 }

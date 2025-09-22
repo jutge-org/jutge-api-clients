@@ -1,21 +1,9 @@
 {
-    "name": "@jutge.org/api-clients",
-    "version": "0.1.7",
-    "description": "Jutge.org API client generator",
-    "keywords": [
-        "jutge.org",
-        "client",
-        "generator"
-    ],
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/jutge-org/cli.git"
-    },
-    "homepage": "https://api.jutge.org/clients",
+    "name": "api-clients",
     "type": "module",
-    "module": "./src/index.ts",
+    "version": "0.1.8",
+    "description": "Jutge.org API client generator",
     "scripts": {
-        "gen": "bun run src/gen.ts",
         "lint": "eslint src",
         "format": "bun prettier src --write",
         "test-python": "(source .venv/bin/activate && cd src/tests/python && pytest)",
@@ -39,21 +27,7 @@
         "radash": "^12.1.0"
     },
     "devDependencies": {
-        "@types/bun": "^1.2.3"
-    },
-    "peerDependencies": {
+        "@types/bun": "^1.2.3",
         "typescript": "^5.0.0"
-    },
-    "prettier": {
-        "plugins": [
-            "prettier-plugin-organize-imports"
-        ],
-        "trailingComma": "all",
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true,
-        "useTabs": false,
-        "arrowParens": "always",
-        "printWidth": 120
     }
 }
