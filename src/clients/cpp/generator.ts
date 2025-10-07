@@ -3,6 +3,7 @@
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
 import { withTmpDir } from '@/utilities'
 import { $ } from 'bun'
+import path from 'path'
 
 export async function genCppClient(dir: ApiDir): Promise<string> {
     const preamble = genPreamble(dir.info)
@@ -93,11 +94,13 @@ g++ -I/opt/homebrew/include -std=c++20 program.cpp -l ssl -l crypto
 }
 
 async function genSkeleton1() {
-    return await Bun.file('src/clients/cpp/skeleton1.cpp').text()
+    const packageRoot = path.resolve(__dirname, '../../..')
+    return await Bun.file(`${packageRoot}/src/clients/cpp/skeleton1.cpp`).text()
 }
 
 async function genSkeleton2() {
-    return await Bun.file('src/clients/cpp/skeleton2.cpp').text()
+    const packageRoot = path.resolve(__dirname, '../../..')
+    return await Bun.file(`${packageRoot}/src/clients/cpp/skeleton2.cpp`).text()
 }
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
@@ -375,8 +378,8 @@ function serializers(model: any, name: string): string {
         const from_json = `
             void from_json(const json& j, ${name}& x) {
                 ${Object.entries(model.properties)
-                    .map(([key, value]: [string, any]) => `j.at("${key}").get_to(x.${namify(key)});`)
-                    .join('\n    ')}
+                .map(([key, value]: [string, any]) => `j.at("${key}").get_to(x.${namify(key)});`)
+                .join('\n    ')}
             }`
 
         return `${to_json}\n${from_json}`

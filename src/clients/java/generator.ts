@@ -4,6 +4,7 @@ import type { ApiDir, ApiEndpointDir, ApiModuleDir } from '@/types'
 import { $ } from 'bun'
 import { pascal } from 'radash'
 import { withTmpDir } from '../../utilities'
+import path from 'path'
 
 export async function genJavaClient(dir: ApiDir): Promise<string> {
     return await format(await new JavaGenerator(dir).generate())
@@ -12,7 +13,7 @@ export async function genJavaClient(dir: ApiDir): Promise<string> {
 class JavaGenerator {
     private aliases: Map<string, string> = new Map()
 
-    constructor(private dir: ApiDir) {}
+    constructor(private dir: ApiDir) { }
 
     async generate(): Promise<string> {
         const preamble = this.genPreamble()
@@ -52,7 +53,8 @@ Notes:
     }
 
     private async genSkeleton(): Promise<string> {
-        return await Bun.file('src/clients/java/JutgeApiClient.java').text()
+        const packageRoot = path.resolve(__dirname, '../../..')
+        return await Bun.file(`${packageRoot}/src/clients/java/JutgeApiClient.java`).text()
     }
 
     private genModels(): string {
