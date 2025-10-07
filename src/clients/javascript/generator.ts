@@ -2,6 +2,7 @@
 
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
 import * as prettier from 'prettier'
+import path from 'path'
 
 export async function genJavaScriptClient(dir: ApiDir): Promise<string> {
     const skeleton = await genSkeleton()
@@ -61,7 +62,8 @@ ${info.description}
 }
 
 async function genSkeleton() {
-    return await Bun.file('src/clients/javascript/skeleton.js').text()
+    const packageRoot = path.resolve(__dirname, '../../..')
+    return await Bun.file(`${packageRoot}/src/clients/javascript/skeleton.js`).text()
 }
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {

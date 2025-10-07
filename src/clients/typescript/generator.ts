@@ -1,9 +1,11 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
 import * as prettier from 'prettier'
+import path from 'path'
 
 export async function genTypeScriptClient(dir: ApiDir): Promise<string> {
-    const skeleton = await Bun.file('src/clients/typescript/skeleton.ts').text()
+    const packageRoot = path.resolve(__dirname, '../../..')
+    const skeleton = await Bun.file(`${packageRoot}/src/clients/typescript/skeleton.ts`).text()
     const preamble = genPreamble(dir.info)
     const models = genModels(dir)
     const modules = genModule(dir.root, [], true)
