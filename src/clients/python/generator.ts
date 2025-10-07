@@ -4,9 +4,11 @@ import type { ApiDir, ApiEndpointDir, ApiModuleDir } from '@/types'
 import { withTmpDir } from '@/utilities'
 import { $ } from 'bun'
 import { pascal } from 'radash'
+import appRoot from 'app-root-path'
 
 export async function genPythonClient(dir: ApiDir): Promise<string> {
-    const skeleton = await Bun.file('src/clients/python/skeleton.py').text()
+    const rootPath = appRoot.path
+    const skeleton = await Bun.file(`${rootPath}/src/clients/python/skeleton.py`).text()
     const preamble = genPreamble(dir.info)
     const models = genModels(dir.models)
     const modules = genModule(dir.root, [], true)
