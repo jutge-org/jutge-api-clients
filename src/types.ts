@@ -30,7 +30,8 @@ export type ApiEndpointDir = {
     name: string
     summary?: string
     description?: string
-    actor?: string
+    actor: string
+    domains: string[]
     input: TSchema
     output: TSchema
     ifiles?: FilesOptions
