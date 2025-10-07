@@ -73,6 +73,10 @@ const createJavaJar = async (directory: ApiDir, destinationDir: string) => {
 
 export const generateClient = async (url: string, lang: Language, destinationDir: string): Promise<string> => {
     const directory = await getAPIDirectory(url)
+    return await generateClientFromDir(directory, lang, destinationDir)
+}
+
+export const generateClientFromDir = async (directory: ApiDir, lang: Language, destinationDir: string): Promise<string> => {
     const info = clients[lang]
 
     // Exception for Java (must create a .jar which contains the client and the gson library)
