@@ -144,7 +144,8 @@ export class JutgeApiClient {
 
         // extract ofiles
         const ofiles = []
-        for (const [key, value] of oform.entries()) {
+        for (const key of oform.keys()) {
+            const value = oform.get(key)
             if (value instanceof File) {
                 ofiles.push({
                     data: new Uint8Array(await value.arrayBuffer()),
