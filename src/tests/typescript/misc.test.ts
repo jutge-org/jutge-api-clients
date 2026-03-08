@@ -1,12 +1,21 @@
-import { describe, expect, it } from 'bun:test'
+import { afterAll, describe, expect, it } from 'bun:test'
 import { JutgeApiClient } from './jutge_api_client'
 
 describe('x-forwarded-host header', () => {
+    const savedDomain = process.env.JUTGE_DOMAIN
+
+    afterAll(() => {
+        if (savedDomain !== undefined) {
+            process.env.JUTGE_DOMAIN = savedDomain
+        } else {
+            delete process.env.JUTGE_DOMAIN
+        }
+    })
+
     it('should include x-forwarded-host when JUTGE_DOMAIN is set', () => {
         process.env.JUTGE_DOMAIN = 'test.jutge.org'
         const client = new JutgeApiClient()
         expect(client.headers['x-forwarded-host']).toBe('test.jutge.org')
-        delete process.env.JUTGE_DOMAIN
     })
 
     it('should not include x-forwarded-host when JUTGE_DOMAIN is not set', () => {
