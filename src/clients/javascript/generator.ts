@@ -1,8 +1,8 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
-import * as prettier from 'prettier'
 import path from 'path'
+import * as prettier from 'prettier'
 
 export async function genJavaScriptClient(dir: ApiDir): Promise<string> {
     const skeleton = await genSkeleton()
@@ -68,9 +68,7 @@ async function genSkeleton() {
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
     const endpoints = module.endpoints.map((endpoint) => genEndpoint(endpoint, path, root))
-    const modules = module.submodules.map((module) =>
-        genSubModule(module, path == '' ? module.name : `${path}.${module.name}`),
-    )
+    const modules = module.submodules.map((module) => genSubModule(module, path == '' ? module.name : `${path}.${module.name}`))
     return endpoints.join('\n') + modules.join('\n')
 }
 

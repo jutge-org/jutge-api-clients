@@ -31,7 +31,7 @@ describe('testMisc', async () => {
 
     it('testGetLogo', async () => {
         const jutge = jutge_api_client
-        const logo = await jutge.misc.getLogo()
+        const [_, logo] = await jutge.misc.getLogo()
         expect(logo).toBeObject()
         expect(logo.name).toBeString()
         expect(logo.type).toBeString()

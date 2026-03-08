@@ -1,7 +1,7 @@
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 import type { ApiDir, ApiEndpointDir, ApiInfo, ApiModuleDir } from '@/types'
-import * as prettier from 'prettier'
 import path from 'path'
+import * as prettier from 'prettier'
 
 export async function genTypeScriptClient(dir: ApiDir): Promise<string> {
     const packageRoot = path.resolve(__dirname, '../../..')
@@ -71,13 +71,9 @@ function genClientTtlsRec(module: ApiModuleDir, path: string[], ttls: Map<string
 function genModule(module: ApiModuleDir, path: string[], root: boolean = false): string {
     const name = root ? 'Module' : module.name
 
-    const submodules_decls = module.submodules.map(
-        (submodule) => `    readonly ${submodule.name}: ${path.join('_')}_${name}_${submodule.name}`,
-    )
+    const submodules_decls = module.submodules.map((submodule) => `    readonly ${submodule.name}: ${path.join('_')}_${name}_${submodule.name}`)
 
-    const submodules_inits = module.submodules.map(
-        (submodule) => `        this.${submodule.name} = new ${path.join('_')}_${name}_${submodule.name}(root)`,
-    )
+    const submodules_inits = module.submodules.map((submodule) => `        this.${submodule.name} = new ${path.join('_')}_${name}_${submodule.name}(root)`)
 
     const endpoints = module.endpoints.map((endpoint) => genEndpoint(endpoint, path.concat(module.name), root))
 
@@ -114,13 +110,9 @@ ${submodules.join('\n')}
 function genMainModule(module: ApiModuleDir): string {
     const clientTtls = genClientTtls(module)
 
-    const submodules_decls = module.submodules.map(
-        (submodule) => `    readonly ${submodule.name}: Module_${submodule.name}`,
-    )
+    const submodules_decls = module.submodules.map((submodule) => `    readonly ${submodule.name}: Module_${submodule.name}`)
 
-    const submodules_inits = module.submodules.map(
-        (submodule) => `        this.${submodule.name} = new Module_${submodule.name}(this)`,
-    )
+    const submodules_inits = module.submodules.map((submodule) => `        this.${submodule.name} = new Module_${submodule.name}(this)`)
 
     return `
 ${submodules_decls.join('\n')}

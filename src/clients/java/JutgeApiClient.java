@@ -162,6 +162,10 @@ public class JutgeApiClient {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
             connection.setRequestProperty("Connection", "Keep-Alive");
+            String jutgeDomain = System.getenv("JUTGE_DOMAIN");
+            if (jutgeDomain != null && !jutgeDomain.isEmpty()) {
+                connection.setRequestProperty("x-forwarded-host", jutgeDomain);
+            }
             return connection;
         }
 

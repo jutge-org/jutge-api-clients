@@ -28,6 +28,11 @@ function execute($func, $input)
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+    $jutge_domain = getenv('JUTGE_DOMAIN');
+    if ($jutge_domain) {
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('x-forwarded-host: ' . $jutge_domain));
+    }
+
     $response = curl_exec($ch);
 
     $lines = explode("\n", $response);

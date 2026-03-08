@@ -1,6 +1,21 @@
 import { describe, expect, it } from 'bun:test'
 import { JutgeApiClient } from './jutge_api_client'
 
+describe('x-forwarded-host header', () => {
+    it('should include x-forwarded-host when JUTGE_DOMAIN is set', () => {
+        process.env.JUTGE_DOMAIN = 'test.jutge.org'
+        const client = new JutgeApiClient()
+        expect(client.headers['x-forwarded-host']).toBe('test.jutge.org')
+        delete process.env.JUTGE_DOMAIN
+    })
+
+    it('should not include x-forwarded-host when JUTGE_DOMAIN is not set', () => {
+        delete process.env.JUTGE_DOMAIN
+        const client = new JutgeApiClient()
+        expect(client.headers['x-forwarded-host']).toBeUndefined()
+    })
+})
+
 describe('testMisc', async () => {
     it('testGetTime', async () => {
         const jutge = new JutgeApiClient()
@@ -31,7 +46,7 @@ describe('testMisc', async () => {
 
     it('testGetLogo', async () => {
         const jutge = new JutgeApiClient()
-        const logo = await jutge.misc.getLogo()
+        const [_, logo] = await jutge.misc.getLogo()
         expect(logo).toBeObject()
         expect(logo.name).toBeString()
         expect(logo.type).toBeString()

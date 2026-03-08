@@ -2,9 +2,9 @@
 
 import type { ApiDir, ApiEndpointDir, ApiModuleDir } from '@/types'
 import { $ } from 'bun'
+import path from 'path'
 import { pascal } from 'radash'
 import { withTmpDir } from '../../utilities'
-import path from 'path'
 
 export async function genJavaClient(dir: ApiDir): Promise<string> {
     return await format(await new JavaGenerator(dir).generate())
@@ -13,7 +13,7 @@ export async function genJavaClient(dir: ApiDir): Promise<string> {
 class JavaGenerator {
     private aliases: Map<string, string> = new Map()
 
-    constructor(private dir: ApiDir) { }
+    constructor(private dir: ApiDir) {}
 
     async generate(): Promise<string> {
         const preamble = this.genPreamble()
@@ -74,13 +74,10 @@ Notes:
     private genModule(module: ApiModuleDir, path: string[], root: boolean = false): string {
         const name = root ? 'Module' : module.name
 
-        const submodules_decls = module.submodules.map(
-            (submodule) => `public ${pascal(path.join('_') + '_' + name + '_' + submodule.name)} ${submodule.name};`,
-        )
+        const submodules_decls = module.submodules.map((submodule) => `public ${pascal(path.join('_') + '_' + name + '_' + submodule.name)} ${submodule.name};`)
 
         const submodules_inits = module.submodules.map(
-            (submodule) =>
-                `this.${submodule.name} = new ${pascal(path.join('_') + '_' + name + '_' + submodule.name)}(root);`,
+            (submodule) => `this.${submodule.name} = new ${pascal(path.join('_') + '_' + name + '_' + submodule.name)}(root);`,
         )
 
         const endpoints = module.endpoints.map((endpoint) => this.genEndpoint(endpoint, path.concat(module.name), root))
@@ -106,9 +103,7 @@ ${indent2(submodules_inits.join('\n'))}
 
 `
 
-        const submodules = module.submodules
-            .filter(this.accept_module)
-            .map((submodule) => this.genModule(submodule, path.concat(name)))
+        const submodules = module.submodules.filter(this.accept_module).map((submodule) => this.genModule(submodule, path.concat(name)))
 
         return `
 ${root ? '' : klass}
@@ -194,10 +189,7 @@ ${indent2(submodules_inits.join('\n'))}
         let code0 = ''
         if (inlined) {
             const content = Object.entries(input.properties)
-                .map(
-                    ([key, _]: [string, any]) =>
-                        `    ijson.add("${key}", new Gson().toJsonTree(${key}).getAsJsonObject());`,
-                )
+                .map(([key, _]: [string, any]) => `    ijson.add("${key}", new Gson().toJsonTree(${key}).getAsJsonObject());`)
                 .join('\n')
 
             code0 = `JsonObject ijson = new JsonObject();\n${content}`
@@ -208,11 +200,7 @@ ${indent2(submodules_inits.join('\n'))}
             init = 'null'
         } else if (endpoint.input.type == 'string') {
             init = `JsonParser.parseString(${endpoint.input.param || 'data'})`
-        } else if (
-            endpoint.input.type == 'int' ||
-            endpoint.input.type == 'number' ||
-            endpoint.input.type == 'integer'
-        ) {
+        } else if (endpoint.input.type == 'int' || endpoint.input.type == 'number' || endpoint.input.type == 'integer') {
             init = `JsonParser.parseString(String.valueOf(${endpoint.input.param || 'data'}))`
         } else {
             init = `new Gson().toJsonTree(${args}).getAsJsonObject()`
@@ -303,13 +291,7 @@ ${this.indent(module)}
     }
 
     private isInlined(model: any): boolean {
-        return (
-            Object.keys(model).length != 0 &&
-            !('$ref' in model) &&
-            !('$anyOf' in model) &&
-            model.type === 'object' &&
-            'properties' in model
-        )
+        return Object.keys(model).length != 0 && !('$ref' in model) && !('$anyOf' in model) && model.type === 'object' && 'properties' in model
     }
 
     private typify(model: any, name: string, path: string, level: number): string {
@@ -330,11 +312,7 @@ ${this.indent(module)}
             } else if (model.anyOf.length == 4 && model.anyOf[0].type === 'Date') {
                 return 'String'
             } else {
-                return (
-                    'Union<' +
-                    model.anyOf.map((x: any) => objectify(this.typify(x, 'fakename', 'fakepath', 99))).join(', ') +
-                    '>'
-                )
+                return 'Union<' + model.anyOf.map((x: any) => objectify(this.typify(x, 'fakename', 'fakepath', 99))).join(', ') + '>'
             }
         } else if (model.type === 'object') {
             if ('properties' in model) {

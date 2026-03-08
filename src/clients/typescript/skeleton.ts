@@ -86,7 +86,9 @@ export class JutgeApiClient {
     JUTGE_API_URL = process.env.JUTGE_API_URL || 'https://api.jutge.org/api'
 
     /** Headers to include in the API requests */
-    headers: Record<string, string> = {}
+    headers: Record<string, string> = {
+        ...(process.env.JUTGE_DOMAIN ? { 'x-forwarded-host': process.env.JUTGE_DOMAIN } : {}),
+    }
 
     /** Meta information */
     meta: Meta | null = null

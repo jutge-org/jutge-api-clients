@@ -4,7 +4,6 @@ import { genJavaScriptClient } from '@/clients/javascript/generator'
 import { genPhpClient } from '@/clients/php/generator'
 import { genPythonClient } from '@/clients/python/generator'
 import { genTypeScriptClient } from '@/clients/typescript/generator'
-import chalk from 'chalk'
 import { exec as syncExec } from 'child_process'
 import { promises as fs } from 'fs'
 import path, { resolve } from 'path'
@@ -32,7 +31,7 @@ export const clients: Record<Language, ClientInfo> = {
 }
 
 export const getAPIDirectory = async (url: string) => {
-    console.log("Fetching API directory from", url)
+    console.log('Fetching API directory from', url)
     const request = await fetch(url)
     return await request.json()
 }

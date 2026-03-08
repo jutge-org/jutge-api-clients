@@ -160,7 +160,11 @@ class JutgeApiClient:
         if ifiles is not None:
             for i, ifile in enumerate(ifiles):
                 files["file_" + str(i)] = ifile
-        response = requests.post(self.JUTGE_API_URL, data={"data": json.dumps(data)}, files=files)
+        headers = {}
+        jutge_domain = os.environ.get("JUTGE_DOMAIN")
+        if jutge_domain:
+            headers["x-forwarded-host"] = jutge_domain
+        response = requests.post(self.JUTGE_API_URL, data={"data": json.dumps(data)}, files=files, headers=headers)
         content_type = response.headers.get("content-type", "").split(";")[0].lower()
         if content_type != "multipart/form-data":
             raise ProtocolException("The content type is not multipart/form-data")

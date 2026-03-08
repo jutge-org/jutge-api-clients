@@ -105,9 +105,7 @@ async function genSkeleton2() {
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
     const endpoints = module.endpoints.map((endpoint) => genEndpoint(endpoint, path, root))
-    const modules = module.submodules.map((module) =>
-        genSubModule(module, path == '' ? module.name : `${path}.${module.name}`),
-    )
+    const modules = module.submodules.map((module) => genSubModule(module, path == '' ? module.name : `${path}.${module.name}`))
     return endpoints.join('\n') + modules.join('\n')
 }
 
@@ -378,8 +376,8 @@ function serializers(model: any, name: string): string {
         const from_json = `
             void from_json(const json& j, ${name}& x) {
                 ${Object.entries(model.properties)
-                .map(([key, value]: [string, any]) => `j.at("${key}").get_to(x.${namify(key)});`)
-                .join('\n    ')}
+                    .map(([key, value]: [string, any]) => `j.at("${key}").get_to(x.${namify(key)});`)
+                    .join('\n    ')}
             }`
 
         return `${to_json}\n${from_json}`

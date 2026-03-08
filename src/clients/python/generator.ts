@@ -3,9 +3,8 @@
 import type { ApiDir, ApiEndpointDir, ApiModuleDir } from '@/types'
 import { withTmpDir } from '@/utilities'
 import { $ } from 'bun'
-import { pascal } from 'radash'
 import path from 'path'
-
+import { pascal } from 'radash'
 
 export async function genPythonClient(dir: ApiDir): Promise<string> {
     const packageRoot = path.resolve(__dirname, '../../..')
@@ -97,9 +96,7 @@ function genModel(name: string, model: any): string {
 function genModule(module: ApiModuleDir, path: string[], root: boolean = false): string {
     const name = root ? 'Module' : module.name
 
-    const submodules_decls = module.submodules.map(
-        (submodule) => `${submodule.name}: ${pascal(path.join('_') + '_' + name + '_' + submodule.name)}`,
-    )
+    const submodules_decls = module.submodules.map((submodule) => `${submodule.name}: ${pascal(path.join('_') + '_' + name + '_' + submodule.name)}`)
 
     const submodules_inits = module.submodules.map(
         (submodule) => `self.${submodule.name} = ${pascal(path.join('_') + '_' + name + '_' + submodule.name)}(root)`,
@@ -136,13 +133,9 @@ ${submodules.join('\n')}
 }
 
 function genMainModule(module: ApiModuleDir): string {
-    const submodules_decls = module.submodules.map(
-        (submodule) => `${submodule.name}: ${pascal('Module_' + submodule.name)}`,
-    )
+    const submodules_decls = module.submodules.map((submodule) => `${submodule.name}: ${pascal('Module_' + submodule.name)}`)
 
-    const submodules_inits = module.submodules.map(
-        (submodule) => `self.${submodule.name} = ${pascal('Module_' + submodule.name)}(self)`,
-    )
+    const submodules_inits = module.submodules.map((submodule) => `self.${submodule.name} = ${pascal('Module_' + submodule.name)}(self)`)
 
     return `
 ${indent(submodules_decls.join('\n'))}
@@ -249,13 +242,7 @@ def ${camelToSnakeCase(name)}(self ${params ? ',' : ''} ${params}) -> ${result}:
 }
 
 function isInlined(model: any): boolean {
-    return (
-        Object.keys(model).length != 0 &&
-        !('$ref' in model) &&
-        !('$anyOf' in model) &&
-        model.type === 'object' &&
-        'properties' in model
-    )
+    return Object.keys(model).length != 0 && !('$ref' in model) && !('$anyOf' in model) && model.type === 'object' && 'properties' in model
 }
 
 function typify(model: any, name: string, path: string, level: number): string {

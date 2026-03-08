@@ -16,7 +16,7 @@ const cmd = new Command('jutge-api-client')
             languages = Object.keys(clients)
         }
         for (const language of languages) {
-            const filename = await generateClient(host + "/dir", language as Language, output)
+            const filename = await generateClient(host + '/dir', language as Language, output)
             console.log(`Writting ${language} client to`, filename)
         }
     })

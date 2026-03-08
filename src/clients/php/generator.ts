@@ -43,9 +43,7 @@ async function genSkeleton() {
 
 function genModule(module: ApiModuleDir, path: string, root: boolean = false): string {
     const endpoints = module.endpoints.map((endpoint) => genEndpoint(endpoint, path, root))
-    const modules = module.submodules.map((module) =>
-        genSubModule(module, path == '' ? module.name : `${path}.${module.name}`),
-    )
+    const modules = module.submodules.map((module) => genSubModule(module, path == '' ? module.name : `${path}.${module.name}`))
     return endpoints.join('\n') + modules.join('\n')
 }
 

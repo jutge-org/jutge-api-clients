@@ -268,7 +268,12 @@ tuple<json, Downloads> execute(const string& func, const json& ijson, const File
         datas.push_back({ name, ifiles[i], name, "" });
     }
 
-    const auto result = client.Post("/api", datas);
+    httplib::Headers headers;
+    const char* jutge_domain = getenv("JUTGE_DOMAIN");
+    if (jutge_domain) {
+        headers.emplace("x-forwarded-host", jutge_domain);
+    }
+    const auto result = client.Post("/api", headers, datas);
 
     vector<Download> ofiles;
     json answer;
