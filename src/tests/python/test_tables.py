@@ -3,7 +3,7 @@ import jutge_api_client as j
 
 def test_get_languages():
     jutge = j.JutgeApiClient()
-    languages = jutge.tables.get_languages(None)
+    languages = jutge.tables.get_languages()
     assert isinstance(languages, dict)
     for language_id, language in languages.items():
         assert isinstance(language_id, str)
@@ -15,7 +15,7 @@ def test_get_languages():
 
 def test_get_all():
     jutge = j.JutgeApiClient()
-    tables = jutge.tables.get(None)
+    tables = jutge.tables.get()
     assert isinstance(tables, j.AllTables)
     assert isinstance(tables.languages, dict)
     assert isinstance(tables.languages["ca"], j.Language)

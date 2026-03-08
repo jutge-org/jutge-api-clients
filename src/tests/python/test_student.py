@@ -16,7 +16,7 @@ def jutge():
 
 
 def test_profile_get(jutge):
-    profile = jutge.student.profile.get(None)
+    profile = jutge.student.profile.get()
     assert isinstance(profile, j.Profile)
     assert profile.user_uid == USER_UID
     assert isinstance(profile.email, str)
@@ -24,7 +24,7 @@ def test_profile_get(jutge):
 
 
 def test_profile_get_avatar(jutge):
-    _, avatar = jutge.student.profile.get_avatar(None)
+    _, avatar = jutge.student.profile.get_avatar()
     assert isinstance(avatar, j.Download)
     signature = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
     assert avatar.data[:8] == bytes(signature), "Avatar is not a PNG"
@@ -34,7 +34,7 @@ def test_profile_update():
     updatable = j.JutgeApiClient()
     updatable.login("updatable@jutge.org", "setzejutges")
     # Save original profile
-    original = updatable.student.profile.get(None)
+    original = updatable.student.profile.get()
     # Update name
     updatable.student.profile.update(
         j.NewProfile(
@@ -48,7 +48,7 @@ def test_profile_update():
             timezone_id=original.timezone_id,
         )
     )
-    updated = updatable.student.profile.get(None)
+    updated = updatable.student.profile.get()
     assert updated.name == "Temp Name"
     # Restore original
     updatable.student.profile.update(
@@ -63,7 +63,7 @@ def test_profile_update():
             timezone_id=original.timezone_id,
         )
     )
-    restored = updatable.student.profile.get(None)
+    restored = updatable.student.profile.get()
     assert restored.name == original.name
 
 
@@ -71,7 +71,7 @@ def test_profile_update():
 
 
 def test_keys_get(jutge):
-    keys = jutge.student.keys.get(None)
+    keys = jutge.student.keys.get()
     assert isinstance(keys, j.AllKeys)
     assert isinstance(keys.problems, list)
     assert isinstance(keys.enrolled_courses, list)
@@ -82,26 +82,26 @@ def test_keys_get(jutge):
 
 
 def test_keys_get_problems(jutge):
-    problems = jutge.student.keys.get_problems(None)
+    problems = jutge.student.keys.get_problems()
     assert isinstance(problems, list)
     assert len(problems) > 0
     assert all(isinstance(p, str) for p in problems)
 
 
 def test_keys_get_enrolled_courses(jutge):
-    courses = jutge.student.keys.get_enrolled_courses(None)
+    courses = jutge.student.keys.get_enrolled_courses()
     assert isinstance(courses, list)
     assert "C00001" in courses
 
 
 def test_keys_get_available_courses(jutge):
-    courses = jutge.student.keys.get_available_courses(None)
+    courses = jutge.student.keys.get_available_courses()
     assert isinstance(courses, list)
     assert "C00002" in courses
 
 
 def test_keys_get_lists(jutge):
-    lists = jutge.student.keys.get_lists(None)
+    lists = jutge.student.keys.get_lists()
     assert isinstance(lists, list)
     assert all(isinstance(l, str) for l in lists)
 
@@ -110,7 +110,7 @@ def test_keys_get_lists(jutge):
 
 
 def test_statuses_get_all(jutge):
-    statuses = jutge.student.statuses.get_all(None)
+    statuses = jutge.student.statuses.get_all()
     assert isinstance(statuses, dict)
     assert "P68688" in statuses
     status = statuses["P68688"]
@@ -140,7 +140,7 @@ def test_statuses_get_for_problem(jutge):
 
 
 def test_submissions_get_all(jutge):
-    subs = jutge.student.submissions.get_all(None)
+    subs = jutge.student.submissions.get_all()
     assert isinstance(subs, list)
     assert len(subs) >= 5
     assert all(isinstance(s, j.Submission) for s in subs)
@@ -182,14 +182,14 @@ def test_submissions_get_analysis(jutge):
 
 
 def test_courses_index_enrolled(jutge):
-    courses = jutge.student.courses.index_enrolled(None)
+    courses = jutge.student.courses.index_enrolled()
     assert isinstance(courses, dict)
     assert "instructor1:FAKE_COURSE1" in courses
     assert isinstance(courses["instructor1:FAKE_COURSE1"], j.BriefCourse)
 
 
 def test_courses_index_available(jutge):
-    courses = jutge.student.courses.index_available(None)
+    courses = jutge.student.courses.index_available()
     assert isinstance(courses, dict)
     assert "instructor1:FAKE_COURSE2" in courses or "instructor1:FAKE_COURSE3" in courses
 
@@ -209,11 +209,11 @@ def test_courses_get_available(jutge):
 def test_courses_enroll_unenroll(jutge):
     # Enroll in FAKE_COURSE2
     jutge.student.courses.enroll("instructor1:FAKE_COURSE2")
-    enrolled = jutge.student.courses.index_enrolled(None)
+    enrolled = jutge.student.courses.index_enrolled()
     assert "instructor1:FAKE_COURSE2" in enrolled
     # Unenroll to restore state
     jutge.student.courses.unenroll("instructor1:FAKE_COURSE2")
-    enrolled = jutge.student.courses.index_enrolled(None)
+    enrolled = jutge.student.courses.index_enrolled()
     assert "instructor1:FAKE_COURSE2" not in enrolled
 
 
@@ -221,33 +221,33 @@ def test_courses_enroll_unenroll(jutge):
 
 
 def test_dashboard_get_dashboard(jutge):
-    dashboard = jutge.student.dashboard.get_dashboard(None)
+    dashboard = jutge.student.dashboard.get_dashboard()
     assert isinstance(dashboard, j.Dashboard)
 
 
 def test_dashboard_get_stats(jutge):
-    stats = jutge.student.dashboard.get_stats(None)
+    stats = jutge.student.dashboard.get_stats()
     assert isinstance(stats, dict)
 
 
 def test_dashboard_get_level(jutge):
-    level = jutge.student.dashboard.get_level(None)
+    level = jutge.student.dashboard.get_level()
     assert isinstance(level, str)
 
 
 def test_dashboard_get_absolute_ranking(jutge):
-    ranking = jutge.student.dashboard.get_absolute_ranking(None)
+    ranking = jutge.student.dashboard.get_absolute_ranking()
     assert isinstance(ranking, int)
     assert ranking > 0
 
 
 def test_dashboard_get_heatmap_calendar(jutge):
-    heatmap = jutge.student.dashboard.get_heatmap_calendar(None)
+    heatmap = jutge.student.dashboard.get_heatmap_calendar()
     assert isinstance(heatmap, list)
 
 
 def test_dashboard_get_all_distributions(jutge):
-    dists = jutge.student.dashboard.get_all_distributions(None)
+    dists = jutge.student.dashboard.get_all_distributions()
     assert isinstance(dists, j.AllDistributions)
 
 
@@ -255,7 +255,7 @@ def test_dashboard_get_all_distributions(jutge):
 
 
 def test_awards_get_all(jutge):
-    awards = jutge.student.awards.get_all(None)
+    awards = jutge.student.awards.get_all()
     assert isinstance(awards, dict)
     assert "A00000001" in awards
     assert isinstance(awards["A00000001"], j.BriefAward)
@@ -273,7 +273,7 @@ def test_awards_get(jutge):
 
 
 def test_lists_get_all(jutge):
-    lists = jutge.student.lists.get_all(None)
+    lists = jutge.student.lists.get_all()
     assert isinstance(lists, dict)
     for key, brief in lists.items():
         assert isinstance(key, str)
@@ -281,7 +281,7 @@ def test_lists_get_all(jutge):
 
 
 def test_lists_get(jutge):
-    all_lists = jutge.student.lists.get_all(None)
+    all_lists = jutge.student.lists.get_all()
     assert len(all_lists) > 0
     first_key = next(iter(all_lists))
     lst = jutge.student.lists.get(first_key)

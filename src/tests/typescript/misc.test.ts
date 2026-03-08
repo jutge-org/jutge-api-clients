@@ -28,7 +28,7 @@ describe('x-forwarded-host header', () => {
 describe('testMisc', async () => {
     it('testGetTime', async () => {
         const jutge = new JutgeApiClient()
-        const time = await jutge.misc.getTime(null)
+        const time = await jutge.misc.getTime()
         expect(time).toBeObject()
         expect(time.full_time).toBeString()
         expect(time.int_timestamp).toBeInteger()
@@ -39,12 +39,12 @@ describe('testMisc', async () => {
 
     it('testFortune', async () => {
         const jutge = new JutgeApiClient()
-        const fortune = await jutge.misc.getFortune(null)
+        const fortune = await jutge.misc.getFortune()
         expect(fortune).toBeString()
     })
     it('testGetHomepageStats', async () => {
         const jutge = new JutgeApiClient()
-        const stats = await jutge.misc.getHomepageStats(null)
+        const stats = await jutge.misc.getHomepageStats()
         expect(stats).toBeObject()
         expect(stats.users).toBeInteger()
         expect(stats.problems).toBeInteger()
@@ -55,7 +55,7 @@ describe('testMisc', async () => {
 
     it('testGetLogo', async () => {
         const jutge = new JutgeApiClient()
-        const [_, logo] = await jutge.misc.getLogo(null)
+        const [_, logo] = await jutge.misc.getLogo()
         expect(logo).toBeObject()
         expect(logo.name).toBeString()
         expect(logo.type).toBeString()
