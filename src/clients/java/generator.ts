@@ -15,6 +15,12 @@ class JavaGenerator {
 
     constructor(private dir: ApiDir) {}
 
+    private isVoid(model: any): boolean {
+        if (model.type === 'void') return true
+        if ('$ref' in model && this.aliases.get(model.$ref) === 'Void') return true
+        return false
+    }
+
     async generate(): Promise<string> {
         const preamble = this.genPreamble()
         const skeleton = await this.genSkeleton()
@@ -135,7 +141,7 @@ ${indent2(submodules_inits.join('\n'))}
         let inlined = false
         let params = ''
         let args = 'null'
-        if (input.type !== 'void') {
+        if (!this.isVoid(input)) {
             if (this.isInlined(input)) {
                 inlined = true
                 params = this.typify(input, '', path.join('_'), 0)
@@ -155,19 +161,19 @@ ${indent2(submodules_inits.join('\n'))}
         }
 
         let result = 'void'
-        if (output.type !== 'void') {
+        if (!this.isVoid(output)) {
             result = this.typify(output, '', path.join('_'), 0)
         }
         if (endpoint.ofiles === 'none') {
             // nothing
         } else if (endpoint.ofiles == 'one') {
-            if (endpoint.output.type === 'void') {
+            if (this.isVoid(endpoint.output)) {
                 result = `Download`
             } else {
                 result = `Tuple<${result}, Download>`
             }
         } else if (endpoint.ofiles == 'many') {
-            if (endpoint.output.type === 'void') {
+            if (this.isVoid(endpoint.output)) {
                 result = `Download[]`
             } else {
                 result = `Tuple<${result}, Download[]]>`
@@ -178,13 +184,13 @@ ${indent2(submodules_inits.join('\n'))}
         if (endpoint.ifiles == 'none') {
             ifiles_parameter = ''
         } else if (endpoint.ifiles == 'one') {
-            ifiles_parameter = (input.type !== 'void' ? ', ' : '') + 'byte[] ifile'
+            ifiles_parameter = (!this.isVoid(input) ? ', ' : '') + 'byte[] ifile'
         } else {
-            ifiles_parameter = (input.type !== 'void' ? ', ' : '') + 'byte[][] ifiles'
+            ifiles_parameter = (!this.isVoid(input) ? ', ' : '') + 'byte[][] ifiles'
         }
 
         const with_ofiles = endpoint.ofiles !== 'none'
-        const without_output = with_ofiles && endpoint.output.type === 'void'
+        const without_output = with_ofiles && this.isVoid(endpoint.output)
 
         let code0 = ''
         if (inlined) {
@@ -196,7 +202,7 @@ ${indent2(submodules_inits.join('\n'))}
         }
 
         let init
-        if (input.type === 'void') {
+        if (this.isVoid(input)) {
             init = 'null'
         } else if (endpoint.input.type == 'string') {
             init = `JsonParser.parseString(${endpoint.input.param || 'data'})`
@@ -214,14 +220,14 @@ ${indent2(submodules_inits.join('\n'))}
             let t2 = t
             if (t == 'int') t2 = 'Integer'
             else if (t == 'double') t2 = 'Double'
-            if (endpoint.output.type !== 'void') {
+            if (!this.isVoid(endpoint.output)) {
                 code2 = `${t} result = new Gson().fromJson(execution.output, new TypeToken<${t2}>(){}.getType());`
             }
         }
 
         let code3 = ''
         if (!with_ofiles) {
-            if (endpoint.output.type !== 'void') code3 = `return result;`
+            if (!this.isVoid(endpoint.output)) code3 = `return result;`
         } else if (without_output) {
             if (endpoint.ofiles === 'one') {
                 code3 = `return execution.ofiles[0];`
@@ -235,8 +241,6 @@ ${indent2(submodules_inits.join('\n'))}
                 code3 = `return new ${result}(result, execution.ofiles);`
             }
         }
-
-        if (this.aliases.has(result)) result = this.aliases.get(result)!
 
         return `
 /**
@@ -298,12 +302,8 @@ ${this.indent(module)}
         if (Object.keys(model).length == 0) {
             return 'Object'
         } else if ('$ref' in model) {
-            if (level != 0) {
-                if (this.aliases.has(model.$ref)) return this.aliases.get(model.$ref)!
-                else return model.$ref
-            } else {
-                return model.$ref
-            }
+            if (this.aliases.has(model.$ref)) return this.aliases.get(model.$ref)!
+            return model.$ref
         } else if ('anyOf' in model) {
             if (model.anyOf.length == 2 && model.anyOf[1].type === 'null') {
                 const base = this.typify(model.anyOf[0], name, path, level + 1)
