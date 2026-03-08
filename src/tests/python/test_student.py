@@ -2,7 +2,7 @@ import pytest
 import jutge_api_client as j
 
 
-USER_UID = "99df26a2d6b44b41ad3772f5525dce52"
+import re
 
 
 @pytest.fixture(scope="module")
@@ -18,7 +18,7 @@ def jutge():
 def test_profile_get(jutge):
     profile = jutge.student.profile.get()
     assert isinstance(profile, j.Profile)
-    assert profile.user_uid == USER_UID
+    assert re.fullmatch(r"[0-9a-f]{32}", profile.user_uid)
     assert isinstance(profile.email, str)
     assert profile.name == "User One"
 

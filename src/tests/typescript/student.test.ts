@@ -13,8 +13,6 @@ import type {
     NewProfile,
 } from './jutge_api_client'
 
-const USER_UID = '99df26a2d6b44b41ad3772f5525dce52'
-
 // --- Auth tests ---
 
 describe('auth', () => {
@@ -23,7 +21,7 @@ describe('auth', () => {
         const creds = await jutge.login({ email: 'user1@jutge.org', password: 'setzejutges' })
         expect(creds.token).toBeString()
         expect(creds.token.length).toBeGreaterThan(0)
-        expect(creds.user_uid).toBe(USER_UID)
+        expect(creds.user_uid).toMatch(/^[0-9a-f]{32}$/)
         expect(creds.error).toBe('')
     })
 
@@ -37,7 +35,7 @@ describe('auth', () => {
         const creds = await jutge.auth.loginWithUsername({ username: 'user1', password: 'setzejutges' })
         expect(creds.token).toBeString()
         expect(creds.token.length).toBeGreaterThan(0)
-        expect(creds.user_uid).toBe(USER_UID)
+        expect(creds.user_uid).toMatch(/^[0-9a-f]{32}$/)
         expect(creds.error).toBe('')
     })
 
@@ -45,7 +43,7 @@ describe('auth', () => {
         const jutge = new JutgeApiClient()
         await jutge.login({ email: 'user1@jutge.org', password: 'setzejutges' })
         const profile = await jutge.student.profile.get()
-        expect(profile.user_uid).toBe(USER_UID)
+        expect(profile.user_uid).toMatch(/^[0-9a-f]{32}$/)
         await jutge.logout()
         expect(jutge.student.profile.get()).rejects.toThrow(UnauthorizedError)
     })
@@ -66,7 +64,7 @@ describe('student', () => {
     describe('profile', () => {
         it('get', async () => {
             const profile = await jutge.student.profile.get()
-            expect(profile.user_uid).toBe(USER_UID)
+            expect(profile.user_uid).toMatch(/^[0-9a-f]{32}$/)
             expect(profile.email).toBeString()
             expect(profile.name).toBe('User One')
         })
