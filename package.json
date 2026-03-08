@@ -6,6 +6,7 @@
     "scripts": {
         "lint": "eslint src",
         "format": "bun prettier src --write",
+	"generate": "bun run src/index.ts",
         "test-python": "(source .venv/bin/activate && cd src/tests/python && pytest)",
         "test-typescript": "(cd src/tests/typescript && bun test)",
         "test-java": "(cd src/tests/java && make && make test)",
