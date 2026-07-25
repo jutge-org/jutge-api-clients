@@ -5,6 +5,7 @@ import { genPhpClient } from '@/clients/php/generator'
 import { genPythonClient } from '@/clients/python/generator'
 import { genTypeScriptClient } from '@/clients/typescript/generator'
 import type { TSchema } from '@sinclair/typebox'
+import { Void } from '@sinclair/typebox'
 import { exec as syncExec } from 'child_process'
 import { promises as fs } from 'fs'
 import path, { resolve } from 'path'
@@ -50,7 +51,7 @@ function isNullRef(schema: TSchema, modelMap: Map<string, TSchema>): boolean {
 function normalizeModule(module: ApiModuleDir, modelMap: Map<string, TSchema>) {
     for (const endpoint of module.endpoints) {
         if (isNullRef(endpoint.input, modelMap)) {
-            endpoint.input = { type: 'void' } as TSchema
+            endpoint.input = Void()
         }
     }
     for (const sub of module.submodules) {

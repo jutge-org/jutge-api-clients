@@ -1,17 +1,6 @@
-import { describe, expect, it, beforeAll } from 'bun:test'
+import { beforeAll, describe, expect, it } from 'bun:test'
+import type { BriefList, NewProfile, Submission } from './jutge_api_client'
 import { JutgeApiClient, UnauthorizedError } from './jutge_api_client'
-import type {
-    Profile,
-    AllKeys,
-    Submission,
-    Course,
-    Dashboard,
-    AllDistributions,
-    BriefAward,
-    Award,
-    BriefList,
-    NewProfile,
-} from './jutge_api_client'
 
 // --- Auth tests ---
 
