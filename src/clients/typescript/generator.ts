@@ -218,7 +218,11 @@ function typify(model: any, name?: string): string {
     } else if ('$ref' in model) {
         return model.$ref
     } else if ('anyOf' in model) {
-        return model.anyOf.map(typify).join(' | ')
+        if (model.anyOf.length == 4 && model.anyOf[0].type === 'Date') {
+            return 'Iso8601Date'
+        } else {
+            return model.anyOf.map(typify).join(' | ')
+        }
     } else if (model.type === 'object') {
         if ('properties' in model) {
             const props = Object.entries(model.properties)

@@ -13,12 +13,16 @@
 
 # pylint: disable=line-too-long, too-many-lines, unused-variable, fixme, redefined-builtin, too-many-instance-attributes, too-few-public-methods, too-many-locals
 
+# ruff check is getting quite picky lattely, so we disable some rules
+# ruff: noqa: B023, RUF059, UP045, I001, PYI016, BLE001, TRY002
+
+
 from __future__ import annotations
 
 import json
 import os
 import re
-from typing import Any, Type, Optional, BinaryIO
+from typing import Any, Optional, BinaryIO
 from pydantic import BaseModel, TypeAdapter, Field
 from pydantic_core import to_jsonable_python
 from requests_toolbelt.multipart import decoder  # type: ignore
@@ -26,6 +30,9 @@ from rich import print
 import yaml
 import requests
 
+
+# Type for dates
+type Iso8601Date = str        # Example: "2026-12-31T11:00:00.000+02:00" is the 31st of December 2026 at 11:00:00 in Barcelona in Summer Time
 
 # Models
 
@@ -107,7 +114,7 @@ class Util:
     """
 
     @staticmethod
-    def from_json[T](s: str, t: Type[T]) -> T:
+    def from_json[T](s: str, t: type[T]) -> T:
         """Parse a JSON string into a Python object"""
 
         return TypeAdapter(t).validate_json(s)
@@ -136,7 +143,7 @@ class Util:
         return Util.json_to_yaml(Util.to_json(obj))
 
     @staticmethod
-    def from_yaml[T](s: str, t: Type[T]) -> T:
+    def from_yaml[T](s: str, t: type[T]) -> T:
         """Convert a YAML string into a Python object"""
         return Util.from_json(Util.yaml_to_json(s), t)
 
@@ -230,11 +237,11 @@ class JutgeApiClient:
             self.execute("auth.logout", None)
         except UnauthorizedException:
             pass
-        except Exception as e:
+        except Exception:
             if not silent:
                 print("[red]Error at log out[/red]")
             else:
-                raise e
+                raise
         finally:
             self._meta = None
             if not silent:

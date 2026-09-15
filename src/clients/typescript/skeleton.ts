@@ -3,6 +3,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+
+// Type for dates
+type Iso8601Date = string        // Example: "2026-12-31T11:00:00.000+02:00" is the 31st of December 2026 at 11:00:00 in Barcelona in Summer Time
+
 // Models
 
 // MODELS_HERE

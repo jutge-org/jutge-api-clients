@@ -29,7 +29,7 @@ python3 -m pip install --upgrade pytest requests requests-toolbelt pyyaml rich p
 Run
 
 ```shell
-bun gen
+bun run generate
 ```
 
 to generate all the clients in the `out` directory.

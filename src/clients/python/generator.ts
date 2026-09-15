@@ -6,6 +6,8 @@ import { $ } from 'bun'
 import path from 'path'
 import { pascal } from 'radash'
 
+export const PYTHON_VERSION = 'py312' // for ruff
+
 export async function genPythonClient(dir: ApiDir): Promise<string> {
     const packageRoot = path.resolve(__dirname, '../../..')
     const skeleton = await Bun.file(`${packageRoot}/src/clients/python/skeleton.py`).text()
@@ -33,7 +35,7 @@ async function format(source: string): Promise<string> {
         const path = `${tmp}/client.py`
         Bun.write(path, source)
         try {
-            await $`ruff format --line-length=320 ${path}`.quiet()
+            await $`ruff format --target-version ${PYTHON_VERSION} --line-length=320 ${path}`.quiet()
             return await Bun.file(path).text()
         } catch (e) {
             console.error('Failed to format python code')
@@ -53,7 +55,7 @@ async function check(source: string): Promise<void> {
         Bun.write(path, source)
 
         try {
-            await $`ruff check ${path}`.quiet()
+            await $`ruff check --target-version ${PYTHON_VERSION} ${path}`.quiet()
         } catch (e) {
             console.error('Failed to check python code')
             if (e instanceof Error && 'info' in e && e.info instanceof Object && 'stderr' in e.info && e.info.stderr) {
@@ -286,9 +288,10 @@ function typifyAnyOf(model: any, name: string, path: string, level: number): str
         }
         return `Optional[${typify(model.anyOf[0], name, path, level + 1)}] ${field}`
     } else if (model.anyOf.length == 4 && model.anyOf[0].type === 'Date') {
-        return 'str'
+        return 'Iso8601Date'
     } else {
-        return 'Union[' + model.anyOf.map(typify).join(', ') + ']'
+        // return 'Union[' + model.anyOf.map(typify).join(', ') + ']'
+        return model.anyOf.map(typify).join(' | ') 
     }
 }
 
