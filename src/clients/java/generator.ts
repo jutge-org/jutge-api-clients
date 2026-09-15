@@ -312,7 +312,14 @@ ${this.indent(module)}
             } else if (model.anyOf.length == 4 && model.anyOf[0].type === 'Date') {
                 return 'String'
             } else {
-                return 'Union<' + model.anyOf.map((x: any) => objectify(this.typify(x, 'fakename', 'fakepath', 99))).join(', ') + '>'
+                const parts = model.anyOf.map((x: any) => objectify(this.typify(x, 'fakename', 'fakepath', 99)))
+                if (allSame(parts)) {
+                    return parts[0]
+                } else if (model.anyOf.length == 2) {
+                    return 'Either<' + parts.join(', ') + '>'
+                } else {
+                    throw new Error("Unions with more than 2 elements are not supported yet")
+                }
             }
         } else if (model.type === 'object') {
             if ('properties' in model) {
@@ -390,6 +397,7 @@ function indent2(s: string): string {
 
 function namify(name: string): string {
     if (name === 'public') return 'pub' // public is a reserved word in Java
+    if (name === 'interface') return 'iface' // interface is a reserved word in Java
     return name
 }
 
@@ -417,3 +425,7 @@ async function format(source: string): Promise<string> {
         return await Bun.file(path).text()
     })
 }
+
+function allSame<T>(arr: T[]): boolean {
+    return arr.every(item => item === arr[0]);
+  }

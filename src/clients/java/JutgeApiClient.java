@@ -41,6 +41,11 @@ import com.google.gson.reflect.TypeToken;
 
 @SuppressWarnings("unused")
 
+// define a Either type for Java (Claude AI)
+sealed interface Either<A, B> permits Left, Right {}
+record Left<A, B>(A value) implements Either<A, B> {}
+record Right<A, B>(B value) implements Either<A, B> {}
+
 /**
  *
  * JutgeApiClient
