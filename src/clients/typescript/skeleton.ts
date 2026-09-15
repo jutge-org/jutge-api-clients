@@ -5,7 +5,7 @@
 
 
 // Type for dates
-type Iso8601Date = string        // Example: "2026-12-31T11:00:00.000+02:00" is the 31st of December 2026 at 11:00:00 in Barcelona in Summer Time
+type Iso8601Date = string        // Example: "2026-12-31T11:00:00.000+01:00" is the 31st of December 2026 at 11:00:00 in Barcelona in Winter Time
 
 // Models
 
@@ -81,6 +81,9 @@ export class JutgeApiClient {
     /** Whether to use cache or not */
     useCache: boolean = true
 
+    /** Whether to log API calls or not */
+    logApiCalls: boolean = false
+
     /** Whether to log cache or not */
     logCache: boolean = false
 
@@ -100,6 +103,23 @@ export class JutgeApiClient {
 
     /** Function that sends a request to the API and returns the response. **/
     async execute(func: string, input: any, ifiles: File[] = []): Promise<[any, Download[]]> {
+        //
+
+        let startTime = new Date()
+        let endTime: Date
+        try {
+            return await this.execute2(func, input, ifiles)
+        } finally {
+            endTime = new Date()
+            if (this.logApiCalls) {
+                const duration = Math.round((endTime.getTime() - startTime.getTime()))
+                console.log(`${func}: ${duration}ms`)
+            }
+        }
+    }
+
+    /** Function that sends a request to the API and returns the response. **/
+    async execute2(func: string, input: any, ifiles: File[] = []): Promise<[any, Download[]]> {
         //
 
         const caching = this.useCache && this.clientTTLs.has(func) && ifiles.length === 0
