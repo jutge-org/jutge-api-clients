@@ -155,6 +155,11 @@ class JutgeApiClient:
 
     JUTGE_API_URL: str = os.environ.get("JUTGE_API_URL", "https://api.jutge.org/api")
 
+    # user agent to include in the API requests
+    # This is a metadata included in the request that identifies the client making the call to the server) 
+    # You should set this to a value that identifies your client, such as the name of the client and its version.
+    user_agent: str = "python-client"
+
     _meta: Any | None = None
 
     # MAIN_MODULE_HERE
@@ -162,7 +167,7 @@ class JutgeApiClient:
     def execute(self, func: str, input: Any, ifiles: list[BinaryIO] | None = None) -> tuple[Any, list[Download]]:
         """Function that sends a request to the API and returns the response"""
 
-        data = {"func": func, "input": input, "meta": self._meta}
+        data = {"func": func, "input": input, "meta": self._meta, "userAgent": self.user_agent}
         files = {}
         if ifiles is not None:
             for i, ifile in enumerate(ifiles):

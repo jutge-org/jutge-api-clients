@@ -75,9 +75,6 @@ type CacheEntry = {
 export class JutgeApiClient {
     //
 
-    /** Client TTL values (in seconds) */
-    clientTTLs: Map<string, number> = new Map()
-
     /** Whether to use cache or not */
     useCache: boolean = true
 
@@ -86,6 +83,16 @@ export class JutgeApiClient {
 
     /** Whether to log cache or not */
     logCache: boolean = false
+
+    /** 
+     * User agent to include in the API requests.
+     * This is a metadata included in the request that identifies the client making the call to the server) 
+     * You should set this to a value that identifies your client, such as the name of the client and its version.
+    **/
+    userAgent: string = 'typescript-client'
+
+    /** Client TTL values (in seconds) */
+    clientTTLs: Map<string, number> = new Map()
 
     /** The cache */
     private cache: Map<string, CacheEntry> = new Map()
@@ -144,7 +151,7 @@ export class JutgeApiClient {
 
         // prepare form
         const iform = new FormData()
-        const idata = { func, input, meta: this.meta }
+        const idata = { func, input, meta: this.meta, userAgent: this.userAgent }
         iform.append('data', JSON.stringify(idata))
         for (const index in ifiles) iform.append(`file_${index}`, ifiles[index])
 
