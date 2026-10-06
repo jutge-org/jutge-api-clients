@@ -230,12 +230,12 @@ function typify(model: any, name?: string): string {
                 .join(', ')
             if (name) {
                 const props = Object.entries(model.properties)
-                    .map(([key, value]: [string, any]) => `    ${key}: ${typify(value)}`)
+                    .map(([key, value]: [string, any]) => `    ${key}: ${typify(value)}${fieldComment(value.description, 'line')}`)
                     .join(',\n')
                 return `{\n${props}\n}`
             } else {
                 const props = Object.entries(model.properties)
-                    .map(([key, value]: [string, any]) => `${key}: ${typify(value)}`)
+                    .map(([key, value]: [string, any]) => `${key}: ${typify(value)}${fieldComment(value.description, 'block')}`)
                     .join(', ')
                 return `{ ${props} } `
             }
@@ -267,6 +267,14 @@ function typify(model: any, name?: string): string {
     /* We do not have this type :-( */
     console.error(model)
     return 'UNKNOWN'
+}
+
+function fieldComment(description: unknown, style: 'line' | 'block'): string {
+    if (typeof description !== 'string') return ''
+    const text = description.replace(/\s+/g, ' ').trim()
+    if (!text) return ''
+    if (style === 'line') return ` // ${text}`
+    return ` /* ${text.replace(/\*\//g, '* /')} */`
 }
 
 function capitalize(s: string): string {
