@@ -230,8 +230,8 @@ function typify(model: any, name?: string): string {
                 .join(', ')
             if (name) {
                 const props = Object.entries(model.properties)
-                    .map(([key, value]: [string, any]) => `    ${key}: ${typify(value)}${fieldComment(value.description, 'line')}`)
-                    .join(',\n')
+                    .map(([key, value]: [string, any]) => `    ${key}: ${typify(value)},${fieldComment(value.description, 'line')}`)
+                    .join('\n')
                 return `{\n${props}\n}`
             } else {
                 const props = Object.entries(model.properties)
