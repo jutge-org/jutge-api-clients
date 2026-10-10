@@ -126,7 +126,7 @@ ${clientTtls}
 }
 
 function genEndpoint(endpoint: ApiEndpointDir, path: string[], root: boolean = false): string {
-    const { name, input, output, summary, description, actor, status } = endpoint
+    const { name, input, output, summary, description, actor, status, domains } = endpoint
     let params = ''
     let args = 'null'
     if (input.type !== 'void') {
@@ -183,14 +183,15 @@ function genEndpoint(endpoint: ApiEndpointDir, path: string[], root: boolean = f
         }
     }
 
+    const summary_line = summary ? ` * ${summary}\n *\n` : ''
+    const description_line = description ? ` * ${description.replaceAll('\n', '\n *').trim()}\n *\n` : ''
+    const domains_line = domains ? ` * 🗂️ Domains: ${domains.join(', ')}\n` : ''
+    const actor_line = actor ? ` * 🔐 Authentication: ${actor.replace('Actor', '')}\n` : ''
+    const status_line = status ? ` * ‼️ Warning: ${status}\n` : ''
+
     return `
 /**
- * ${summary || 'No summary'}
- *
- * ${actor ? `🔐 Authentication: ${actor.replace('Actor', '')}` : 'No authentication'}
- * ${status ? `❌ Warning: ${status}` : 'No warnings'}
- * ${description ? description : ''}
- */
+${summary_line}${description_line}${domains_line}${actor_line}${status_line} */
 async ${toCamelCase(name)}(${params}) : Promise<${result}> {
     ${code1}
     ${code2}
